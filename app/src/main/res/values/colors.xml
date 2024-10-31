@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+
+    <color name="seekbar_alpha_gray"> #14FFFFFF </color>
+
+    <color name="alpha"> #00000000 </color>
+    <color name="standart_text_color">#b8b8b8</color>
+    <color name="standart_light_color">#b8b8b8</color>
+    <color name="standart_blue_color">#0000FE</color>
+    <color name="select_color">#2e9cdb</color>
+    <color name="standart_background">#303030</color>
+    <color name="background_common_edit_text">#424242</color>
+    <color name="transperent">#00000000</color>
+    <color name="background_outline"> #636262 </color>
+    <color name="red"> #ff0000 </color>
+    <color name="standart_red"> #cc412f </color>
+    <color name="standart_orange"> #ed991a </color>
+    <color name="standart_green"> #55c90c </color>
+
+
+    <!-- рандомные цвета аватарок -->
+    <color name="chats_red"> #fc7253 </color>
+    <color name="chats_purpure"> #fc79c8 </color>
+    <color name="chats_purple"> #cf66ff </color>
+    <color name="chats_blue"> #5f5cff </color>
+    <color name="chats_turquoise"> #7ff7ff </color>
+    <color name="chats_dark_turquoise"> #2e9cdb </color>
+    <color name="chats_green"> #75ff93 </color>
+    <color name="chats_yellow"> #effc5d </color>
+    <color name="chats_orange"> #fcbe60 </color>
+    <color name="chats_dark_orange"> #ed991a </color>
+
+    <!-- данные цвета относятся к цвету кружочка во акладке журналы Используются в usecase-ах GetLogUseCaseByPhrase и GetLogsUseCaseByInterval-->
+    <color name="log_default"> #9e9e9e </color>
+    <color name="log_warning"> #fb8c00 </color>
+    <color name="log_success"> #4caf50 </color>
+    <color name="log_error"> #ff5252 </color>
+
+
+
+
+
+
+
+
+</resources>
