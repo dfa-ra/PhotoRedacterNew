@@ -21,7 +21,6 @@ public class PhotoDialog extends Dialog {
 
     private DialogPhotoViewBinding binding;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +79,8 @@ public class PhotoDialog extends Dialog {
 
         Log.d("aa99", "end drawPhoto");
     }
+
+
 
     // билдер
     public static PhotoDialog getInstance(Context context){

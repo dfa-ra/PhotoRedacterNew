@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
             Picasso.get().load(url).into(new Target() {
                 @Override
                 public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                    Log.e("aa99", "onBitmapLoaded");
+                    Log.i("aa99", "onBitmapLoaded");
                     dialog.drawPhoto(new BitmapDrawable(getResources(), bitmap));
                 }
 

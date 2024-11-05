@@ -5,12 +5,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.github.chrisbanes.photoview.PhotoView
-        android:id="@+id/full_image_view"
-        android:focusable="false"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:ignore="MissingClass" />
+        android:layout_height="match_parent">
+
+        <com.example.photoredacternew.customView.CustomPhotoView
+            android:id="@+id/full_image_view"
+            android:focusable="false"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:ignore="MissingClass"/>
+
+    </LinearLayout>
 
     <com.github.ybq.android.spinkit.SpinKitView
         android:id="@+id/load_animation"
