@@ -3,7 +3,6 @@ package com.example.photoredacternew.customView;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
@@ -14,48 +13,38 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
-import android.view.ViewTreeObserver;
 import android.view.animation.DecelerateInterpolator;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 public class CustomPhotoView extends AppCompatImageView {
 
     private Matrix matrix;
-
     private ScaleGestureDetector scaleGestureDetector;
     private GestureDetector gestureDetector;
-
-    private float minScale = 2f;
-    private float maxScale = 10.0f;
-    private float doubleTapZoomScale = 0.1f;
-
+    private float minScale = 0f;
+    private float maxScale = 0f;
+    private float doubleTapZoomScale = 0f;
     private boolean isZoomed = false;
-
-    private float currentScale = 2.0f;
+    private float currentScale = 0f;
 
     public CustomPhotoView(Context context, AttributeSet attr) {
         super(context, attr);
         init(context);
     }
 
-    private void init(Context context){
+    private void init(Context context) {
         matrix = new Matrix();
-
         setScaleType(ScaleType.MATRIX);
         scaleGestureDetector = new ScaleGestureDetector(context, new ScaleListener());
         gestureDetector = new GestureDetector(context, new GestureListener());
-
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        Log.i("aa99","onDraw");
         super.onDraw(canvas);
-        if (getDrawable() != null){
+        if (getDrawable() != null) {
             canvas.save();
             canvas.concat(matrix);
             getDrawable().setBounds(0, 0, getDrawable().getIntrinsicWidth(), getDrawable().getIntrinsicHeight());
@@ -64,22 +53,29 @@ public class CustomPhotoView extends AppCompatImageView {
         }
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.d("aa99", "onTouchEvent: " + event.getAction());
         scaleGestureDetector.onTouchEvent(event);
         gestureDetector.onTouchEvent(event);
         return true;
     }
 
+
+    // переопределяем setImageDrawable для того чтобы при добавлении фото оно выровнялось
+    // по ширине или высоте экрана... так же определяем размеры максимума и минимума увеличения
     @Override
     public void setImageDrawable(@Nullable Drawable drawable) {
         super.setImageDrawable(drawable);
-        fitImageView();
+        if (drawable != null) {
+            fitImageView();
+            minScale = currentScale;
+            maxScale = currentScale * 4;
+            doubleTapZoomScale = currentScale; // на сколько увеличивается зум при двойном нажатии
+        }
     }
 
-    private void fitImageView(){
+    // метод выравнивания фото по высоте или ширине
+    private void fitImageView() {
         Drawable drawable = getDrawable();
         if (drawable == null) return;
 
@@ -89,26 +85,24 @@ public class CustomPhotoView extends AppCompatImageView {
         float drawableHeight = drawable.getIntrinsicHeight();
 
         float scale, dx, dy;
-        if (viewWidth / drawableWidth < viewHeight / drawableHeight){
+        if (viewWidth / drawableWidth < viewHeight / drawableHeight) {
             scale = viewWidth / drawableWidth;
-            currentScale = scale;
             dx = 0;
             dy = (viewHeight - drawableHeight * scale) / 2;
-        }
-        else {
+        } else {
             scale = viewHeight / drawableHeight;
-            currentScale = scale;
             dx = (viewWidth - drawableWidth * scale) / 2;
             dy = 0;
         }
 
+        currentScale = scale;  // Устанавливаем начальный масштаб
         matrix.setScale(scale, scale);
         matrix.postTranslate(dx, dy);
-        setImageMatrix(matrix);
+        setImageMatrix(matrix);  // Устанавливаем матрицу только один раз
     }
 
-
-    private void checkBounds(){
+    // проверка на всякие ограничения
+    private void checkBounds() {
         Drawable drawable = getDrawable();
         if (drawable == null) return;
 
@@ -119,44 +113,41 @@ public class CustomPhotoView extends AppCompatImageView {
         if (bounds.width() > getWidth()) {
             if (bounds.left > 0) offsetX = -bounds.left;
             else if (bounds.right < getWidth()) offsetX = getWidth() - bounds.right;
-        }
-        else {
+        } else {
             offsetX = (getWidth() - bounds.width()) / 2 - bounds.left;
         }
         if (bounds.height() > getHeight()) {
             if (bounds.top > 0) offsetY = -bounds.top;
             else if (bounds.bottom < getHeight()) offsetY = getHeight() - bounds.bottom;
-        }
-        else {
+        } else {
             offsetY = (getHeight() - bounds.height()) / 2 - bounds.top;
         }
         matrix.postTranslate(offsetX, offsetY);
     }
 
+    // Listener зума с помощью 2 пальцев
     private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener {
         @Override
         public boolean onScale(ScaleGestureDetector detector) {
             float scaleFactor = detector.getScaleFactor();
             float newScale = currentScale * scaleFactor;
 
-            Log.d("aa99", "1) scaleFactor: " + scaleFactor + " currentScale: " + currentScale);
-
-            // Ограничиваем новый масштаб в пределах minScale и maxScale
             if (newScale > minScale && newScale < maxScale) {
                 matrix.postScale(scaleFactor, scaleFactor, detector.getFocusX(), detector.getFocusY());
                 currentScale = newScale;
                 checkBounds();
                 setImageMatrix(matrix);
-                Log.d("aa99", "3) currentScale после обновления: " + currentScale);
             }
-            // Ограничиваем изображение в пределах видимой области
+
+            Log.d("aa99","currentScale: " + currentScale);
             return true;
         }
     }
 
-    private class GestureListener extends GestureDetector.SimpleOnGestureListener{
+    // скалиррование двоййным надатием и скрол фото
+    private class GestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
-        public boolean onScroll(@Nullable MotionEvent e1, @NonNull MotionEvent e2, float distanceX, float distanceY) {
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
             matrix.postTranslate(-distanceX, -distanceY);
             checkBounds();
             setImageMatrix(matrix);
@@ -164,35 +155,47 @@ public class CustomPhotoView extends AppCompatImageView {
         }
 
         @Override
-        public boolean onDoubleTap(@NonNull MotionEvent e) {
+        public boolean onDoubleTap(MotionEvent e) {
             animateZoom(e.getX(), e.getY());
             return true;
         }
     }
 
-    // Метод для плавной анимации зума
-    private void animateZoom(float x, float y) {
+    // анимация зума
+    private void animateZoom(float focusX, float focusY) {
         float startScale = currentScale;
-        float endScale = isZoomed ? 1f : doubleTapZoomScale;
+        float endScale = isZoomed ? minScale : currentScale + doubleTapZoomScale;
         isZoomed = !isZoomed;
 
         ValueAnimator animator = ValueAnimator.ofFloat(startScale, endScale);
         animator.setInterpolator(new DecelerateInterpolator());
         animator.setDuration(300);
         animator.addUpdateListener(animation -> {
+            Log.d("aa99","-----------");
             float animatedValue = (float) animation.getAnimatedValue();
-            float scaleFactor = animatedValue / startScale;
+            Log.d("aa99", "animatedValue: " + animatedValue);
+            Log.d("aa99", "startScale: " + startScale);
+            float scaleFactor = animatedValue / currentScale;
+            Log.d("aa99", "scaleFactor: " + scaleFactor);
 
-            matrix.set(getImageMatrix());
-            matrix.postScale(scaleFactor, scaleFactor, x, y);
-            checkBounds();
-            setImageMatrix(matrix);
+
+            // Устанавливаем текущую матрицу и масштабируем относительно точки нажатия
+            if (animatedValue > minScale && animatedValue < maxScale) {
+                matrix.set(getImageMatrix());
+                matrix.postScale(scaleFactor, scaleFactor, focusX, focusY);
+                currentScale = animatedValue;
+                checkBounds();
+                setImageMatrix(matrix);
+            }
+            Log.d("aa99","currentScale: " + currentScale);
         });
 
         animator.addListener(new AnimatorListenerAdapter() {
             @Override
             public void onAnimationEnd(Animator animation) {
-                currentScale = endScale;
+                if (!isZoomed) {
+                    fitImageView();
+                }
             }
         });
 
