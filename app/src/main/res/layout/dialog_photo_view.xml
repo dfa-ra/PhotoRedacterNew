@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,10 +11,10 @@
 
         <com.example.photoredacternew.customView.CustomPhotoView
             android:id="@+id/full_image_view"
-            android:focusable="false"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:ignore="MissingClass"/>
+            android:focusable="false"
+            tools:ignore="MissingClass" />
 
     </LinearLayout>
 
@@ -44,5 +44,46 @@
             />
     </LinearLayout>
 
+    <!-- кнопка закрыть -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:alpha="0.8"
+        android:background="@drawable/map_fragment_buttons_background">
+
+        <Button
+            android:id="@+id/colorPellete"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+
+            android:background="@android:drawable/ic_menu_edit" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/darken_layer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        android:background="#80000000"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+
+    <com.example.photoredacternew.customView.CustomPaletteView
+        android:id="@+id/customPaletteView"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        app:colors="@array/colors"
+        app:positions="@array/positions"
+        android:visibility="gone" />
+
+    </LinearLayout>
 
 </RelativeLayout>

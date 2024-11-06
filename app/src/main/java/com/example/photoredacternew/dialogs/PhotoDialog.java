@@ -1,5 +1,6 @@
-package com.example.photoredacternew;
+package com.example.photoredacternew.dialogs;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
@@ -11,6 +12,7 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 
+import com.example.photoredacternew.R;
 import com.example.photoredacternew.databinding.DialogPhotoViewBinding;
 
 /**
@@ -20,7 +22,7 @@ import com.example.photoredacternew.databinding.DialogPhotoViewBinding;
 public class PhotoDialog extends Dialog {
 
     private DialogPhotoViewBinding binding;
-
+    private Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +30,7 @@ public class PhotoDialog extends Dialog {
 
     private PhotoDialog(@NonNull Context context) {
         super(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
+        this.context = context;
 
         // во весь экран
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
@@ -59,12 +62,32 @@ public class PhotoDialog extends Dialog {
         // закрыть диалог
         this.binding.destroy.setOnClickListener(clc -> this.dismiss());
 
+        // кнопка открытия палитры
+        binding.colorPellete.setOnClickListener(view -> {
+
+            int[] colors = context.getResources().getIntArray(R.array.colors);
+            float[] positions = new float[colors.length];
+            for (int i = 0; i < colors.length; i++) {
+                positions[i] = (float) i / (colors.length - 1);
+            }
+
+            binding.customPaletteView.setColors(colors);
+            binding.customPaletteView.setPositions(positions);
+
+            Log.d("aa99", "setOnClickListener");
+            binding.customPaletteView.setVisibility(View.VISIBLE);
+            binding.darkenLayer.setVisibility(View.VISIBLE);
+        });
+
+        binding.darkenLayer.setOnClickListener(view -> {
+            binding.customPaletteView.setVisibility(View.GONE);
+            binding.darkenLayer.setVisibility(View.GONE);
+        });
     }
 
     public void open () {
         this.show();
     }
-
 
     // отрисовать изображение
     public void drawPhoto(BitmapDrawable photo) {
@@ -80,12 +103,9 @@ public class PhotoDialog extends Dialog {
         Log.d("aa99", "end drawPhoto");
     }
 
-
-
     // билдер
     public static PhotoDialog getInstance(Context context){
         return new PhotoDialog(context);
     }
-
 
 }
