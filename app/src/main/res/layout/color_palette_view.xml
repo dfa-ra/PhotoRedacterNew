@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/map_fragment_buttons_background">
+
+    <com.example.photoredacternew.CustomSamples.CustomLayout.CustomPaletteGridLayout
+        android:id="@+id/palette_table"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.8"
+        android:padding="2dp"/>
+
+    <SeekBar
+        android:id="@+id/brightness_seek_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="13dp"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/cloase_icon"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.1"
+            android:background="@drawable/cloase_icon"/>
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabLayout"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.6"
+            app:tabTextColor="@color/white"
+
+            android:background="@drawable/map_fragment_buttons_background" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.1"
+            android:background="@drawable/check_mark_icon"/>
+
+    </LinearLayout>
+
+</LinearLayout>

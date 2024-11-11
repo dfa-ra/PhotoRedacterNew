@@ -1,6 +1,5 @@
 package com.example.photoredacternew.dialogs;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
@@ -71,8 +70,8 @@ public class PhotoDialog extends Dialog {
                 positions[i] = (float) i / (colors.length - 1);
             }
 
-            binding.customPaletteView.setColors(colors);
-            binding.customPaletteView.setPositions(positions);
+//            binding.customPaletteView.setColors(colors);
+//            binding.customPaletteView.setPositions(positions);
 
             Log.d("aa99", "setOnClickListener");
             binding.customPaletteView.setVisibility(View.VISIBLE);

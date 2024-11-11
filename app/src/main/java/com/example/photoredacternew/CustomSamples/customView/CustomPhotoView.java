@@ -1,4 +1,4 @@
-package com.example.photoredacternew.customView;
+package com.example.photoredacternew.CustomSamples.customView;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
