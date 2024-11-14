@@ -56,32 +56,20 @@
         android:background="@drawable/map_fragment_buttons_background">
 
         <Button
-            android:id="@+id/colorPellete"
+            android:id="@+id/edit"
             android:layout_width="50dp"
             android:layout_height="50dp"
 
             android:background="@android:drawable/ic_menu_edit" />
     </LinearLayout>
-
-    <View
-        android:id="@+id/darken_layer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-
-        android:background="#80000000"
-        android:visibility="gone" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center|bottom">
-
-    <com.example.photoredacternew.CustomSamples.customView.CustomPaletteView
-        android:id="@+id/customPaletteView"
+    <com.example.photoredacternew.CustomSamples.CustomLayout.EditPanel
+        android:id="@+id/edit_panel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="15dp"
-        android:visibility="visible" />
-    </LinearLayout>
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/map_fragment_buttons_background"
+        android:gravity="center"
+        android:padding="10dp"
+        android:visibility="gone"/>
 
 </RelativeLayout>

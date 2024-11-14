@@ -10,8 +10,9 @@ import android.view.View;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
 
-import com.example.photoredacternew.R;
+import com.example.photoredacternew.CustomSamples.customView.CustomPaletteSheet;
 import com.example.photoredacternew.databinding.DialogPhotoViewBinding;
 
 /**
@@ -20,7 +21,7 @@ import com.example.photoredacternew.databinding.DialogPhotoViewBinding;
 
 public class PhotoDialog extends Dialog {
 
-    private DialogPhotoViewBinding binding;
+    private final DialogPhotoViewBinding binding;
     private Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,11 +31,9 @@ public class PhotoDialog extends Dialog {
     private PhotoDialog(@NonNull Context context) {
         super(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
         this.context = context;
-
         // во весь экран
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
-        // надуть байндинг
         this.binding = DialogPhotoViewBinding.inflate(LayoutInflater.from(getContext()));
         this.setContentView(binding.getRoot());
     }
@@ -62,25 +61,10 @@ public class PhotoDialog extends Dialog {
         this.binding.destroy.setOnClickListener(clc -> this.dismiss());
 
         // кнопка открытия палитры
-        binding.colorPellete.setOnClickListener(view -> {
-
-            int[] colors = context.getResources().getIntArray(R.array.colors);
-            float[] positions = new float[colors.length];
-            for (int i = 0; i < colors.length; i++) {
-                positions[i] = (float) i / (colors.length - 1);
-            }
-
-//            binding.customPaletteView.setColors(colors);
-//            binding.customPaletteView.setPositions(positions);
-
-            Log.d("aa99", "setOnClickListener");
-            binding.customPaletteView.setVisibility(View.VISIBLE);
-            binding.darkenLayer.setVisibility(View.VISIBLE);
-        });
-
-        binding.darkenLayer.setOnClickListener(view -> {
-            binding.customPaletteView.setVisibility(View.GONE);
-            binding.darkenLayer.setVisibility(View.GONE);
+        binding.edit.setOnClickListener(view -> {
+            binding.destroy.setVisibility(View.GONE);
+            binding.edit.setVisibility(View.GONE);
+            binding.editPanel.setVisibility(View.VISIBLE);
         });
     }
 

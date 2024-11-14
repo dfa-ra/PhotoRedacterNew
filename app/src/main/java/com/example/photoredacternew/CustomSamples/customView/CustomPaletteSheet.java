@@ -1,50 +1,53 @@
 package com.example.photoredacternew.CustomSamples.customView;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
-import android.util.AttributeSet;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.GridLayout;
-import android.widget.LinearLayout;
 import android.widget.SeekBar;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.photoredacternew.CustomSamples.GetSellColorCallBack;
 import com.example.photoredacternew.databinding.ColorPaletteViewBinding;
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.tabs.TabLayout;
 
-public class CustomPaletteView extends LinearLayout implements GetSellColorCallBack {
+import java.util.Objects;
+
+public class CustomPaletteSheet extends BottomSheetDialogFragment implements GetSellColorCallBack {
 
     private GridLayout colorTable;
-    private SeekBar brightnessSeekBar;
+    private SeekBar transparencySeekBar;
     private int selectedColor;
     private ColorPaletteViewBinding binding;
 
-    // Конструктор с Context и AttributeSet для правильной инициализации из XML
-    public CustomPaletteView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init(context); // Инициализация
-    }
-
-    // Конструктор для использования только в коде (например, при динамическом добавлении вью)
-    public CustomPaletteView(Context context) {
-        super(context);
-        init(context); // Инициализация
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = ColorPaletteViewBinding.inflate(inflater, container, false);
+        init(getContext());
+        return binding.getRoot();
     }
 
     // Метод инициализации, который настраивает виджет
     private void init(Context context) {
-        binding = ColorPaletteViewBinding.inflate(LayoutInflater.from(context), this, true);
+        binding = ColorPaletteViewBinding.inflate(LayoutInflater.from(context));
 
         // Инициализация компонентов
         binding.paletteTable.setGetSellColorCallBack(this);
         binding.tabLayout.setSelectedTabIndicatorHeight(0);
-        ;
-        brightnessSeekBar = binding.brightnessSeekBar;
+
+        transparencySeekBar = binding.layoutSeekBar.binding.transparencySeekBar;
 
 
         // Настройка вкладок TabLayout
@@ -68,17 +71,15 @@ public class CustomPaletteView extends LinearLayout implements GetSellColorCallB
 
         setupBrightnessSeekBar();
 
-
     }
-
 
     // Настройка SeekBar для яркости
     private void setupBrightnessSeekBar() {
-        brightnessSeekBar.setMax(100);  // Установка максимальной яркости
-        brightnessSeekBar.setProgress(100);  // Установка начальной яркости
+        transparencySeekBar.setMax(100);
+        transparencySeekBar.setProgress(100);
 
         // Обработчик изменений в SeekBar
-        brightnessSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+        transparencySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 Log.d("aa99", "color: " + selectedColor);
@@ -93,7 +94,6 @@ public class CustomPaletteView extends LinearLayout implements GetSellColorCallB
             public void onStopTrackingTouch(SeekBar seekBar) {}
         });
     }
-
 
     // Метод для регулировки яркости цвета
     private int adjustBrightness(int color, int brightness) {
@@ -115,24 +115,48 @@ public class CustomPaletteView extends LinearLayout implements GetSellColorCallB
         selectedColor = color;
         setSeekBg(color);
         setCrawler(color);
-        brightnessSeekBar.setProgress(100);
+        transparencySeekBar.setProgress(100);
     }
 
 
     private void setSeekBg(int color){
-        GradientDrawable gradientDrawable = new GradientDrawable(
-                GradientDrawable.Orientation.LEFT_RIGHT, new int[]{Color.parseColor("#00000000"), color}
-        );
-        gradientDrawable.setCornerRadius(3);
-        brightnessSeekBar.setProgressDrawable(gradientDrawable);
+        binding.layoutSeekBar.setSeekBarTrackColor(color);
     }
 
     private void setCrawler(int color){
-        ShapeDrawable seekPoint = new ShapeDrawable(new OvalShape());
-        seekPoint.getPaint().setColor(color);
-        seekPoint.setIntrinsicHeight(100);
-        seekPoint.setIntrinsicWidth(100);
+        binding.layoutSeekBar.setThumbColor(color);
+    }
+    @Override
+    public void onResume() {
+        super.onResume();
+        getDialog().getWindow().setFlags(
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+        );
+        getDialog().getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+        );
+        getDialog().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+    }
 
-        brightnessSeekBar.setThumb(seekPoint);
+
+
+    public int getSelectedColor() {
+        return selectedColor;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getDialog().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+    }
+
+    @Override
+    public void onDismiss(@NonNull DialogInterface dialog) {
+        super.onDismiss(dialog);
+        Log.d("aa99", "Диалог закрыт");
     }
 }

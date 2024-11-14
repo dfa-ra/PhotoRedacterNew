@@ -1,0 +1,10 @@
+<!-- custom_seekbar_track.xml -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<item android:id="@android:id/background">
+    <bitmap
+        android:src="@drawable/checker_title"
+        android:tileMode="repeat"
+        android:antialias="true"
+        />
+</item>
+</layer-list>
