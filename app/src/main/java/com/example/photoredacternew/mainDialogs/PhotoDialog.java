@@ -1,4 +1,4 @@
-package com.example.photoredacternew.dialogs;
+package com.example.photoredacternew.mainDialogs;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -10,9 +10,7 @@ import android.view.View;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentActivity;
 
-import com.example.photoredacternew.CustomSamples.customView.CustomPaletteSheet;
 import com.example.photoredacternew.databinding.DialogPhotoViewBinding;
 
 /**
@@ -66,10 +64,12 @@ public class PhotoDialog extends Dialog {
             binding.edit.setVisibility(View.GONE);
             binding.editPanel.setVisibility(View.VISIBLE);
         });
-    }
 
-    public void open () {
-        this.show();
+        binding.editPanel.getClose().setOnClickListener(view -> {
+            binding.destroy.setVisibility(View.VISIBLE);
+            binding.edit.setVisibility(View.VISIBLE);
+            binding.editPanel.setVisibility(View.GONE);
+        });
     }
 
     // отрисовать изображение

@@ -7,14 +7,14 @@
     android:padding="16dp"
     android:background="@drawable/map_fragment_buttons_background">
 
-    <com.example.photoredacternew.CustomSamples.CustomLayout.CustomPaletteGridLayout
+    <com.example.photoredacternew.mainDialogs.paletteDialog.paletteCells.CustomPaletteGridLayout
         android:id="@+id/palette_table"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.8"
         android:padding="2dp"/>
 
-    <com.example.photoredacternew.CustomSamples.customView.CustomSeekBarView
+    <com.example.photoredacternew.mainDialogs.paletteDialog.transparencySeekBar.TransparencySeekBarView
         android:id="@+id/layout_seek_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

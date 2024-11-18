@@ -8,11 +8,10 @@
     android:visibility="visible"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <View
+    <ImageButton
         android:id="@+id/exit"
         android:layout_width="30dp"
         android:layout_height="30dp"
-
         android:background="@drawable/cloase_icon" />
 
     <LinearLayout
@@ -21,23 +20,21 @@
         android:layout_weight="1"
         android:gravity="center">
 
-    <View
+    <ImageButton
         android:id="@+id/color"
-
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginEnd="10dp"
+        android:background="@drawable/selected_color" />
 
-        android:background="@drawable/default_thumb" />
-
-    <ImageView
+    <ImageButton
         android:id="@+id/pencil"
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/pencil"/>
 
-    <ImageView
+    <ImageButton
         android:id="@+id/eraser"
         android:layout_width="30dp"
         android:layout_height="30dp"
@@ -45,7 +42,8 @@
         android:background="@drawable/eraser"/>
 
     </LinearLayout>
-    <TextView
+
+    <ImageButton
         android:id="@+id/do_edit"
         android:layout_width="30dp"
         android:layout_height="30dp"

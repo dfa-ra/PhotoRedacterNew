@@ -1,4 +1,4 @@
-package com.example.photoredacternew.CustomSamples.customView;
+package com.example.photoredacternew.mainDialogs.paletteDialog.paletteCells;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -14,19 +14,15 @@ import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.example.photoredacternew.CustomSamples.GetSellColorCallBack;
+import com.example.photoredacternew.R;
 import com.example.photoredacternew.databinding.ColorPaletteViewBinding;
+import com.example.photoredacternew.mainDialogs.paletteDialog.DrawColor;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.tabs.TabLayout;
 
-import java.util.Objects;
-
 public class CustomPaletteSheet extends BottomSheetDialogFragment implements GetSellColorCallBack {
 
-    private GridLayout colorTable;
     private SeekBar transparencySeekBar;
     private int selectedColor;
     private ColorPaletteViewBinding binding;
@@ -38,6 +34,12 @@ public class CustomPaletteSheet extends BottomSheetDialogFragment implements Get
         init(getContext());
         return binding.getRoot();
     }
+
+    @Override
+    public int getTheme() {
+        return R.style.NoBottomSpaceBottomSheetDialog;
+    }
+
 
     // Метод инициализации, который настраивает виджет
     private void init(Context context) {
@@ -69,30 +71,8 @@ public class CustomPaletteSheet extends BottomSheetDialogFragment implements Get
             public void onTabReselected(TabLayout.Tab tab) {}
         });
 
-        setupBrightnessSeekBar();
+        binding.layoutSeekBar.setupBrightnessSeekBar();
 
-    }
-
-    // Настройка SeekBar для яркости
-    private void setupBrightnessSeekBar() {
-        transparencySeekBar.setMax(100);
-        transparencySeekBar.setProgress(100);
-
-        // Обработчик изменений в SeekBar
-        transparencySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                Log.d("aa99", "color: " + selectedColor);
-                selectedColor = adjustAlpha(selectedColor, progress);
-                setCrawler(selectedColor);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
     }
 
     // Метод для регулировки яркости цвета
@@ -103,29 +83,14 @@ public class CustomPaletteSheet extends BottomSheetDialogFragment implements Get
         return Color.HSVToColor(hsv);
     }
 
-    private int adjustAlpha(int color, int alpha) {
-        float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
-
-        return Color.HSVToColor(255 / 100 * alpha, hsv);
-    }
-
     @Override
     public void getSelectedColor(int color) {
-        selectedColor = color;
-        setSeekBg(color);
-        setCrawler(color);
+        Log.d("aa99", "color: " + color);
+        binding.layoutSeekBar.setSeekBarTrackColor(color);
+        DrawColor.getInstance().setColor(color);
         transparencySeekBar.setProgress(100);
     }
 
-
-    private void setSeekBg(int color){
-        binding.layoutSeekBar.setSeekBarTrackColor(color);
-    }
-
-    private void setCrawler(int color){
-        binding.layoutSeekBar.setThumbColor(color);
-    }
     @Override
     public void onResume() {
         super.onResume();
@@ -141,7 +106,6 @@ public class CustomPaletteSheet extends BottomSheetDialogFragment implements Get
         );
         getDialog().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
     }
-
 
 
     public int getSelectedColor() {
