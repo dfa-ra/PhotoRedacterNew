@@ -1,4 +1,4 @@
-package com.example.photoredacternew.mainDialogs;
+package com.example.photoredacternew.mainDialog;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -20,7 +20,6 @@ import com.example.photoredacternew.databinding.DialogPhotoViewBinding;
 public class PhotoDialog extends Dialog {
 
     private final DialogPhotoViewBinding binding;
-    private Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,7 +27,6 @@ public class PhotoDialog extends Dialog {
 
     private PhotoDialog(@NonNull Context context) {
         super(context, android.R.style.Theme_Black_NoTitleBar_Fullscreen);
-        this.context = context;
         // во весь экран
         getWindow().setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT);
 
@@ -81,7 +79,6 @@ public class PhotoDialog extends Dialog {
         // отрисовать фотку
         this.binding.fullImageView.setVisibility(View.VISIBLE);
         this.binding.fullImageView.setImageDrawable(photo);
-
 
         Log.d("aa99", "end drawPhoto");
     }

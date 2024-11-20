@@ -1,11 +1,9 @@
-package com.example.photoredacternew.mainDialogs;
+package com.example.photoredacternew.mainDialog;
 
 import android.app.Dialog;
 
-import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
-import com.example.photoredacternew.mainDialogs.paletteDialog.paletteCells.CustomPaletteSheet;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 public class DialogsManager {

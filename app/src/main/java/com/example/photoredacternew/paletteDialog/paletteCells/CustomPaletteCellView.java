@@ -1,4 +1,4 @@
-package com.example.photoredacternew.mainDialogs.paletteDialog.paletteCells;
+package com.example.photoredacternew.paletteDialog.paletteCells;
 import android.util.AttributeSet;
 
 import android.animation.ValueAnimator;

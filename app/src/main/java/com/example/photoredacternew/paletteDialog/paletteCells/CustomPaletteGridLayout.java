@@ -1,9 +1,11 @@
-package com.example.photoredacternew.mainDialogs.paletteDialog.paletteCells;
+package com.example.photoredacternew.paletteDialog.paletteCells;
 
 import android.content.Context;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.GridLayout;
+
+import com.example.photoredacternew.paletteDialog.GetSellColorCallBack;
 
 public class CustomPaletteGridLayout extends GridLayout{
 
@@ -32,11 +34,11 @@ public class CustomPaletteGridLayout extends GridLayout{
     private final int rowsCount = headRowsColorArray.length;
     private CustomPaletteCellView selectedColor = null;
 
-    private GetSellColorCallBack getSellColorCallBack;
+    private GetSellColorCallBack listener;
 
 
-    public void setGetSellColorCallBack(GetSellColorCallBack listener){
-        this.getSellColorCallBack = listener;
+    public void setListener(GetSellColorCallBack listener){
+        this.listener = listener;
     }
 
     public CustomPaletteGridLayout(Context context) {
@@ -102,7 +104,7 @@ public class CustomPaletteGridLayout extends GridLayout{
                 colorView.click();
                 selectedColor = colorView;
             }
-            getSellColorCallBack.getSelectedColor(selectedColor.getColor());
+            listener.getSelectedColor(selectedColor.getColor());
         });
         // Добавляем ячейку в таблицу
         addView(colorView);

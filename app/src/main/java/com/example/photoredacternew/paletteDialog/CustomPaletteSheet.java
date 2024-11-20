@@ -1,31 +1,38 @@
-package com.example.photoredacternew.mainDialogs.paletteDialog.paletteCells;
+package com.example.photoredacternew.paletteDialog;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.GridLayout;
-import android.widget.SeekBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.example.photoredacternew.R;
 import com.example.photoredacternew.databinding.ColorPaletteViewBinding;
-import com.example.photoredacternew.mainDialogs.paletteDialog.DrawColor;
+import com.example.photoredacternew.paletteDialog.paletteCells.CustomPaletteGridLayout;
+import com.example.photoredacternew.paletteDialog.transparencySeekBar.TransparencySeekBarView;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.tabs.TabLayout;
 
 public class CustomPaletteSheet extends BottomSheetDialogFragment implements GetSellColorCallBack {
 
-    private SeekBar transparencySeekBar;
+    private TransparencySeekBarView transparencySeekBar;
+
+    private CustomPaletteGridLayout paletteGridLayout;
+    private ColorCallBack listener;
+
     private int selectedColor;
     private ColorPaletteViewBinding binding;
+
+
+    public CustomPaletteSheet(ColorCallBack listener){
+        this.listener = listener;
+    }
 
     @Nullable
     @Override
@@ -45,12 +52,13 @@ public class CustomPaletteSheet extends BottomSheetDialogFragment implements Get
     private void init(Context context) {
         binding = ColorPaletteViewBinding.inflate(LayoutInflater.from(context));
 
-        // Инициализация компонентов
-        binding.paletteTable.setGetSellColorCallBack(this);
         binding.tabLayout.setSelectedTabIndicatorHeight(0);
 
-        transparencySeekBar = binding.layoutSeekBar.binding.transparencySeekBar;
+        paletteGridLayout = binding.paletteTable;
+        paletteGridLayout.setListener(this);
 
+        transparencySeekBar = binding.layoutSeekBar;
+        transparencySeekBar.setListner(this);
 
         // Настройка вкладок TabLayout
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Палитра"));
@@ -70,25 +78,18 @@ public class CustomPaletteSheet extends BottomSheetDialogFragment implements Get
             @Override
             public void onTabReselected(TabLayout.Tab tab) {}
         });
-
         binding.layoutSeekBar.setupBrightnessSeekBar();
-
-    }
-
-    // Метод для регулировки яркости цвета
-    private int adjustBrightness(int color, int brightness) {
-        float[] hsv = new float[3];
-        Color.colorToHSV(color, hsv);
-        hsv[2] = brightness / 100f;
-        return Color.HSVToColor(hsv);
     }
 
     @Override
     public void getSelectedColor(int color) {
-        Log.d("aa99", "color: " + color);
-        binding.layoutSeekBar.setSeekBarTrackColor(color);
-        DrawColor.getInstance().setColor(color);
-        transparencySeekBar.setProgress(100);
+        selectedColor = color;
+        transparencySeekBar.setColor(color);
+    }
+
+    @Override
+    public void getUpdateTransparency(int color) {
+        selectedColor = color;
     }
 
     @Override
@@ -107,11 +108,6 @@ public class CustomPaletteSheet extends BottomSheetDialogFragment implements Get
         getDialog().getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
     }
 
-
-    public int getSelectedColor() {
-        return selectedColor;
-    }
-
     @Override
     public void onPause() {
         super.onPause();
@@ -120,7 +116,12 @@ public class CustomPaletteSheet extends BottomSheetDialogFragment implements Get
 
     @Override
     public void onDismiss(@NonNull DialogInterface dialog) {
+        listener.getSelectedColor(selectedColor);
         super.onDismiss(dialog);
         Log.d("aa99", "Диалог закрыт");
+    }
+
+    public interface ColorCallBack {
+        void getSelectedColor(int color);
     }
 }

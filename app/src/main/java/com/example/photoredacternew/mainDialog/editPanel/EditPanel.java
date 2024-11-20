@@ -1,4 +1,4 @@
-package com.example.photoredacternew.mainDialogs.editPanel;
+package com.example.photoredacternew.mainDialog.editPanel;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -12,18 +12,13 @@ import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
-import androidx.fragment.app.FragmentActivity;
 
 import com.example.photoredacternew.R;
-import com.example.photoredacternew.mainDialogs.DialogsManager;
-import com.example.photoredacternew.mainDialogs.paletteDialog.CustomObservers.CollorObserver;
-import com.example.photoredacternew.mainDialogs.paletteDialog.DrawColor;
-import com.example.photoredacternew.mainDialogs.paletteDialog.paletteCells.CustomPaletteSheet;
+import com.example.photoredacternew.mainDialog.DialogsManager;
+import com.example.photoredacternew.paletteDialog.CustomPaletteSheet;
 import com.example.photoredacternew.databinding.EditPanelLayoutBinding;
 
-import io.reactivex.rxjava3.annotations.NonNull;
-
-public class EditPanel extends LinearLayout {
+public class EditPanel extends LinearLayout implements CustomPaletteSheet.ColorCallBack {
 
     private EditPanelLayoutBinding binding;
     private Drawable fill;
@@ -49,14 +44,13 @@ public class EditPanel extends LinearLayout {
     @SuppressLint("UseCompatLoadingForDrawables")
     private void init(Context context){
         binding = EditPanelLayoutBinding.inflate(LayoutInflater.from(context), this, true);
-        customPaletteSheet = new CustomPaletteSheet();
+        customPaletteSheet = new CustomPaletteSheet(this);
 
         fill = context.getResources().getDrawable(R.drawable.custom_fill_thumb);
         border = context.getResources().getDrawable(R.drawable.custom_border_thumb);
         Drawable[] layers = { fill, border };
         layerDrawable = new LayerDrawable(layers);
         actions();
-        observer();
     }
 
     private void actions(){
@@ -66,15 +60,10 @@ public class EditPanel extends LinearLayout {
         });
     }
 
-    private void observer(){
-        DrawColor.getInstance().getColor().subscribe(new CollorObserver() {
-            @Override
-            public void onNext(@NonNull Integer integer) {
-                fill.setColorFilter(integer, PorterDuff.Mode.SRC); // Замените RED на нужный цвет
-                fill.setColorFilter(integer, PorterDuff.Mode.SRC); // Замените RED на нужный цвет
-                binding.color.setBackground(layerDrawable);
-            }
-        });
+    @Override
+    public void getSelectedColor(int color) {
+        fill.setColorFilter(color, PorterDuff.Mode.SRC); // Замените RED на нужный цвет
+        fill.setColorFilter(color, PorterDuff.Mode.SRC); // Замените RED на нужный цвет
+        binding.color.setBackground(layerDrawable);
     }
-
 }

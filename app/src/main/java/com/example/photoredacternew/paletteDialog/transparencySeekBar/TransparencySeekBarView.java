@@ -1,4 +1,4 @@
-package com.example.photoredacternew.mainDialogs.paletteDialog.transparencySeekBar;
+package com.example.photoredacternew.paletteDialog.transparencySeekBar;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -18,16 +18,17 @@ import androidx.annotation.Nullable;
 
 import com.example.photoredacternew.R;
 import com.example.photoredacternew.databinding.TransparencySeekBarViewBinding;
-import com.example.photoredacternew.mainDialogs.paletteDialog.CustomObservers.CollorObserver;
-import com.example.photoredacternew.mainDialogs.paletteDialog.DrawColor;
+import com.example.photoredacternew.paletteDialog.GetSellColorCallBack;
 
 
 public class TransparencySeekBarView extends FrameLayout {
-    public TransparencySeekBarViewBinding binding;
+    private TransparencySeekBarViewBinding binding;
+    private GetSellColorCallBack listner;
     private Drawable fill;
     private Drawable border;
     private int new_color;
     LayerDrawable layerDrawable;
+
 
     public TransparencySeekBarView(@NonNull Context context) {
         super(context);
@@ -60,26 +61,23 @@ public class TransparencySeekBarView extends FrameLayout {
         binding.gradientView.setBackground(gradientDrawable);
     }
 
+    public void setColor(int color){
+            new_color = color;
+            setSeekBarTrackColor(color);
+            binding.transparencySeekBar.setProgress(100);
+            setThumbColor(new_color);
+    }
+
     // Настройка SeekBar для яркости
     public void setupBrightnessSeekBar() {
 
-        DrawColor.getInstance().getColor().subscribe(new CollorObserver() {
-            @Override
-            public void onNext(@io.reactivex.rxjava3.annotations.NonNull Integer integer) {
-                Log.d("aa99", "setupBrightnessSeekBar: " + integer);
-                new_color = integer;
-                setThumbColor(new_color);
-            }
-        });
-
-
-        // Обработчик изменений в SeekBar
         binding.transparencySeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 Log.d("aa99", "color: " + new_color);
                 new_color = adjustAlpha(new_color, progress);
-                DrawColor.getInstance().setColor(new_color);
+                listner.getUpdateTransparency(new_color);
+                setThumbColor(new_color);
             }
 
             @Override
@@ -90,6 +88,11 @@ public class TransparencySeekBarView extends FrameLayout {
         });
     }
 
+
+    public void setListner(GetSellColorCallBack listner) {
+        this.listner = listner;
+    }
+
     private int adjustAlpha(int color, int alpha) {
         float[] hsv = new float[3];
         Color.colorToHSV(color, hsv);
@@ -98,6 +101,4 @@ public class TransparencySeekBarView extends FrameLayout {
         Log.d("aa99", "adjustAlpha: " + color + "  " + alpha);
         return Color.HSVToColor(alpha255, hsv);
     }
-
-
 }
