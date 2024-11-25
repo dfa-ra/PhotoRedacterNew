@@ -10,8 +10,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.photoredacternew.databinding.ActivityMainBinding;
-import com.example.photoredacternew.mainDialog.DialogsManager;
-import com.example.photoredacternew.mainDialog.PhotoDialog;
+import com.example.photoredacternew.viewDialog.PhotoDialog;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 

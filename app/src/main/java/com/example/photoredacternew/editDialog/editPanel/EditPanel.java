@@ -1,4 +1,4 @@
-package com.example.photoredacternew.mainDialog.editPanel;
+package com.example.photoredacternew.editDialog.editPanel;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.Nullable;
 
 import com.example.photoredacternew.R;
-import com.example.photoredacternew.mainDialog.DialogsManager;
+import com.example.photoredacternew.DialogsManager;
 import com.example.photoredacternew.paletteDialog.CustomPaletteSheet;
 import com.example.photoredacternew.databinding.EditPanelLayoutBinding;
 

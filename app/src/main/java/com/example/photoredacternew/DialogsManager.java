@@ -1,4 +1,4 @@
-package com.example.photoredacternew.mainDialog;
+package com.example.photoredacternew;
 
 import android.app.Dialog;
 

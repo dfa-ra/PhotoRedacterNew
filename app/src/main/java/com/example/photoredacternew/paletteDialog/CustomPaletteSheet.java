@@ -22,8 +22,8 @@ import com.google.android.material.tabs.TabLayout;
 public class CustomPaletteSheet extends BottomSheetDialogFragment implements GetSellColorCallBack {
 
     private TransparencySeekBarView transparencySeekBar;
-
     private CustomPaletteGridLayout paletteGridLayout;
+
     private ColorCallBack listener;
 
     private int selectedColor;

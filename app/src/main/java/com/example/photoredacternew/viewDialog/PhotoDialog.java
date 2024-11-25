@@ -1,7 +1,8 @@
-package com.example.photoredacternew.mainDialog;
+package com.example.photoredacternew.viewDialog;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,7 +12,10 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 
+import com.example.photoredacternew.DialogsManager;
 import com.example.photoredacternew.databinding.DialogPhotoViewBinding;
+import com.example.photoredacternew.editDialog.EditDialog;
+import com.example.photoredacternew.editDialog.photoDrawer.CustomPhotoDrawView;
 
 /**
  * далог для рассматривания изображений
@@ -20,6 +24,7 @@ import com.example.photoredacternew.databinding.DialogPhotoViewBinding;
 public class PhotoDialog extends Dialog {
 
     private final DialogPhotoViewBinding binding;
+    private Bitmap bitmap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,16 +63,12 @@ public class PhotoDialog extends Dialog {
 
         // кнопка открытия палитры
         binding.edit.setOnClickListener(view -> {
-            binding.destroy.setVisibility(View.GONE);
-            binding.edit.setVisibility(View.GONE);
-            binding.editPanel.setVisibility(View.VISIBLE);
+//            binding.destroy.setVisibility(View.GONE);
+//            binding.edit.setVisibility(View.GONE);
+            DialogsManager.getInstanceWithActivity().showDialog(EditDialog.getInstance(getContext(), bitmap));
+//            DialogsManager.getInstanceWithActivity().dismissDialog(this);
         });
 
-        binding.editPanel.getClose().setOnClickListener(view -> {
-            binding.destroy.setVisibility(View.VISIBLE);
-            binding.edit.setVisibility(View.VISIBLE);
-            binding.editPanel.setVisibility(View.GONE);
-        });
     }
 
     // отрисовать изображение
@@ -76,9 +77,11 @@ public class PhotoDialog extends Dialog {
         // спрятать загрузку
         this.binding.loadAnimation.setVisibility(View.GONE);
 
+
         // отрисовать фотку
         this.binding.fullImageView.setVisibility(View.VISIBLE);
         this.binding.fullImageView.setImageDrawable(photo);
+        this.bitmap = photo.getBitmap();
 
         Log.d("aa99", "end drawPhoto");
     }

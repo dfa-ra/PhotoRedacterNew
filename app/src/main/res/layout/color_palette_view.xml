@@ -14,6 +14,8 @@
         android:layout_weight="0.8"
         android:padding="2dp"/>
 
+     
+
     <com.example.photoredacternew.paletteDialog.transparencySeekBar.TransparencySeekBarView
         android:id="@+id/layout_seek_bar"
         android:layout_width="match_parent"

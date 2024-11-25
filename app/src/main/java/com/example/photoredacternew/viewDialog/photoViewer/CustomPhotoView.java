@@ -1,4 +1,4 @@
-package com.example.photoredacternew.mainDialog.photoViewer;
+package com.example.photoredacternew.viewDialog.photoViewer;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
