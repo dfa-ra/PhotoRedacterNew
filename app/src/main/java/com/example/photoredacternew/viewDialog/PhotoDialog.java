@@ -12,16 +12,14 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 
-import com.example.photoredacternew.DialogsManager;
 import com.example.photoredacternew.databinding.DialogPhotoViewBinding;
-import com.example.photoredacternew.editDialog.EditDialog;
-import com.example.photoredacternew.editDialog.photoDrawer.CustomPhotoDrawView;
+import com.example.photoredacternew.viewDialog.photoEditer.GetEditedBitmapCallBack;
 
 /**
  * далог для рассматривания изображений
  */
 
-public class PhotoDialog extends Dialog {
+public class PhotoDialog extends Dialog implements GetEditedBitmapCallBack {
 
     private final DialogPhotoViewBinding binding;
     private Bitmap bitmap;
@@ -61,14 +59,16 @@ public class PhotoDialog extends Dialog {
         // закрыть диалог
         this.binding.destroy.setOnClickListener(clc -> this.dismiss());
 
-        // кнопка открытия палитры
+        // кнопка открытия панели измменения фото
         binding.edit.setOnClickListener(view -> {
-//            binding.destroy.setVisibility(View.GONE);
-//            binding.edit.setVisibility(View.GONE);
-            DialogsManager.getInstanceWithActivity().showDialog(EditDialog.getInstance(getContext(), bitmap));
-//            DialogsManager.getInstanceWithActivity().dismissDialog(this);
+            binding.fullImageDrawRelativeLayout.setVisibility(View.VISIBLE);
+            binding.fullImageViewRelativeLayout.setVisibility(View.GONE);
         });
 
+        binding.fullImageDrawRelativeLayout.getClose().setOnClickListener(view -> {
+            binding.fullImageDrawRelativeLayout.setVisibility(View.GONE);
+            binding.fullImageViewRelativeLayout.setVisibility(View.VISIBLE);
+        });
     }
 
     // отрисовать изображение
@@ -79,9 +79,11 @@ public class PhotoDialog extends Dialog {
 
 
         // отрисовать фотку
-        this.binding.fullImageView.setVisibility(View.VISIBLE);
         this.binding.fullImageView.setImageDrawable(photo);
-        this.bitmap = photo.getBitmap();
+        this.binding.fullImageDrawRelativeLayout.setImageDrawable(photo);
+        this.binding.fullImageDrawRelativeLayout.setListener(this);
+
+        binding.fullImageDrawRelativeLayout.setVisibility(View.GONE);
 
         Log.d("aa99", "end drawPhoto");
     }
@@ -91,4 +93,11 @@ public class PhotoDialog extends Dialog {
         return new PhotoDialog(context);
     }
 
+    @Override
+    public void getEditedBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+        binding.fullImageDrawRelativeLayout.setVisibility(View.GONE);
+        binding.fullImageViewRelativeLayout.setVisibility(View.VISIBLE);
+        binding.fullImageView.setImageDrawable(new BitmapDrawable(getContext().getResources(), bitmap));
+    }
 }

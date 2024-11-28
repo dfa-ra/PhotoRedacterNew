@@ -1,4 +1,4 @@
-package com.example.photoredacternew.editDialog.photoDrawer.brushes;
+package com.example.photoredacternew.viewDialog.photoEditer.brushes;
 
 import android.graphics.Paint;
 

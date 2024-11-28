@@ -2,11 +2,14 @@ package com.example.photoredacternew.viewDialog.photoViewer;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.BidirectionalTypeConverter;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -20,14 +23,14 @@ import androidx.appcompat.widget.AppCompatImageView;
 
 public class CustomPhotoView extends AppCompatImageView {
 
-    private Matrix matrix;
+    protected Matrix matrix;
     private ScaleGestureDetector scaleGestureDetector;
     private GestureDetector gestureDetector;
     private float minScale = 0f;
     private float maxScale = 0f;
     private float doubleTapZoomScale = 0f;
     private boolean isZoomed = false;
-    private float currentScale = 0f;
+    protected float currentScale = 0f;
 
     public CustomPhotoView(Context context, AttributeSet attr) {
         super(context, attr);
@@ -66,7 +69,10 @@ public class CustomPhotoView extends AppCompatImageView {
     @Override
     public void setImageDrawable(@Nullable Drawable drawable) {
         super.setImageDrawable(drawable);
+        Log.d("aa88", "Custom View setImageDrawable");
         if (drawable != null) {
+
+            Log.d("aa88", "drawable != null");
             fitImageView();
             minScale = currentScale;
             maxScale = currentScale * 4;
@@ -75,7 +81,7 @@ public class CustomPhotoView extends AppCompatImageView {
     }
 
     // метод выравнивания фото по высоте или ширине
-    private void fitImageView() {
+    protected void fitImageView() {
         Drawable drawable = getDrawable();
         if (drawable == null) return;
 
