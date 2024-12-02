@@ -207,4 +207,8 @@ public class CustomPhotoView extends AppCompatImageView {
 
         animator.start();
     }
+
+    public ScaleGestureDetector getScaleGestureDetector() {
+        return scaleGestureDetector;
+    }
 }

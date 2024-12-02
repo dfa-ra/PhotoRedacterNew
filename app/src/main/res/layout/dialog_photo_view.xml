@@ -63,6 +63,7 @@
                 android:id="@+id/edit"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:visibility="gone"
 
                 android:background="@android:drawable/ic_menu_edit" />
         </LinearLayout>
@@ -73,7 +74,7 @@
         android:id="@+id/full_image_draw_relative_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="invisible">
 
     </com.example.photoredacternew.viewDialog.photoEditer.CustomDrawerRelativeLayout>
 </RelativeLayout>

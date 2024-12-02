@@ -19,6 +19,22 @@
 
     </LinearLayout>
 
+    <!-- Ваш VerticalSeekBar -->
+    <com.example.photoredacternew.viewDialog.photoEditer.customView.VerticalSeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="wrap_content"
+        android:layout_height="300dp"
+        android:progress="50"
+        android:progressDrawable="@drawable/custom_seekbar_progress_width"
+        android:thumb="@color/transperent"
+        android:max="100"
+
+        android:padding="12dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerInParent="true"
+        android:translationX="16dp"
+       />
+
     <com.example.photoredacternew.viewDialog.photoEditer.EditPanel
         android:id="@+id/edit_panel"
         android:layout_width="match_parent"

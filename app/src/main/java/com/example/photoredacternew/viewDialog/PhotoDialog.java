@@ -61,8 +61,10 @@ public class PhotoDialog extends Dialog implements GetEditedBitmapCallBack {
 
         // кнопка открытия панели измменения фото
         binding.edit.setOnClickListener(view -> {
+
             binding.fullImageDrawRelativeLayout.setVisibility(View.VISIBLE);
             binding.fullImageViewRelativeLayout.setVisibility(View.GONE);
+            this.binding.fullImageDrawRelativeLayout.setImageBitmap(bitmap);
         });
 
         binding.fullImageDrawRelativeLayout.getClose().setOnClickListener(view -> {
@@ -76,15 +78,14 @@ public class PhotoDialog extends Dialog implements GetEditedBitmapCallBack {
         Log.d("aa99", "start drawPhoto");
         // спрятать загрузку
         this.binding.loadAnimation.setVisibility(View.GONE);
-
+        this.binding.edit.setVisibility(View.VISIBLE);
 
         // отрисовать фотку
         this.binding.fullImageView.setImageDrawable(photo);
-        this.binding.fullImageDrawRelativeLayout.setImageDrawable(photo);
         this.binding.fullImageDrawRelativeLayout.setListener(this);
+        this.bitmap = photo.getBitmap();
 
-        binding.fullImageDrawRelativeLayout.setVisibility(View.GONE);
-
+        this.binding.fullImageDrawRelativeLayout.setImageBitmap(bitmap);
         Log.d("aa99", "end drawPhoto");
     }
 

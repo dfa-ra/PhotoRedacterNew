@@ -16,6 +16,7 @@ import com.example.photoredacternew.R;
 import com.example.photoredacternew.databinding.ColorPaletteViewBinding;
 import com.example.photoredacternew.paletteDialog.paletteCells.CustomPaletteGridLayout;
 import com.example.photoredacternew.paletteDialog.transparencySeekBar.TransparencySeekBarView;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.tabs.TabLayout;
 
@@ -41,18 +42,14 @@ public class CustomPaletteSheet extends BottomSheetDialogFragment implements Get
         init(getContext());
         return binding.getRoot();
     }
-
     @Override
     public int getTheme() {
         return R.style.NoBottomSpaceBottomSheetDialog;
     }
 
-
     // Метод инициализации, который настраивает виджет
     private void init(Context context) {
         binding = ColorPaletteViewBinding.inflate(LayoutInflater.from(context));
-
-        binding.tabLayout.setSelectedTabIndicatorHeight(0);
 
         paletteGridLayout = binding.paletteTable;
         paletteGridLayout.setListener(this);
@@ -60,24 +57,6 @@ public class CustomPaletteSheet extends BottomSheetDialogFragment implements Get
         transparencySeekBar = binding.layoutSeekBar;
         transparencySeekBar.setListner(this);
 
-        // Настройка вкладок TabLayout
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Палитра"));
-
-        binding.tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                // Обработка вкладки
-                if (tab.getPosition() == 0) {
-
-                }
-            }
-
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {}
-
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {}
-        });
         binding.layoutSeekBar.setupBrightnessSeekBar();
     }
 
