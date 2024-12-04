@@ -1,5 +1,6 @@
 package com.example.photoredacternew.viewDialog.photoEditer;
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.PorterDuff;
@@ -13,6 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.example.photoredacternew.R;
 import com.example.photoredacternew.databinding.EditPanelLayoutBinding;
+import com.example.photoredacternew.viewDialog.photoEditer.customView.VerticalSeekBar;
 
 public class EditPanel extends LinearLayout {
     public EditPanelLayoutBinding binding;
@@ -50,4 +52,20 @@ public class EditPanel extends LinearLayout {
         fill.setColorFilter(color, PorterDuff.Mode.SRC); // Замените RED на нужный цвет
         binding.color.setBackground(layerDrawable);
     }
+
+    // Анимация для выдвижения/защелкивания SeekBar
+    public void animateEditPanel(EditPanel editPanel, float targetTranslationX) {
+        ObjectAnimator animator = ObjectAnimator.ofFloat(editPanel, "translationX", targetTranslationX);
+        animator.setDuration(200); // продолжительность анимации
+        animator.start();
+    }
+
+    public void hideEditPanel(){
+        animateEditPanel(this,  130f);
+    }
+
+    public void showEditPanel(){
+        animateEditPanel(this,  0f);
+    }
+
 }

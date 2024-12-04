@@ -211,4 +211,7 @@ public class CustomPhotoView extends AppCompatImageView {
     public ScaleGestureDetector getScaleGestureDetector() {
         return scaleGestureDetector;
     }
+    public GestureDetector getGestureDetector(){
+        return gestureDetector;
+    }
 }

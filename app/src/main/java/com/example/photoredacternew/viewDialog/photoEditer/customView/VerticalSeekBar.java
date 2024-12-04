@@ -12,6 +12,7 @@ import android.widget.SeekBar;
 public class VerticalSeekBar extends SeekBar {
 
     private boolean active = false;
+    private GetWidthCallBack listener;
 
     public VerticalSeekBar(Context context) {
         super(context);
@@ -83,7 +84,7 @@ public class VerticalSeekBar extends SeekBar {
 
                 int progress = (int) (scale * getMax()); // Преобразуем в значение прогресса
                 setProgress(progress); // Устанавливаем прогресс
-
+                listener.getWidth(progress);
                 performClick(); // Для Accessibility
                 return true;
 
@@ -102,7 +103,7 @@ public class VerticalSeekBar extends SeekBar {
     }
 
     public void activateSeekBar(){
-        if (getTranslationX() >= 15f) {
+        if (getTranslationX() <= -15f) {
             // Если SeekBar частично скрыт, показываем его полностью
             animateSeekBar(this,  0f);
             this.active = true;
@@ -112,9 +113,28 @@ public class VerticalSeekBar extends SeekBar {
     public void deactivateSeekBar(){
         if (getTranslationX() == 0f) {
             // Если SeekBar частично скрыт, показываем его полностью
-            animateSeekBar(this,  45f);
+            animateSeekBar(this,  -60f);
             this.active = false;
         }
+    }
+
+    public void hideSeekBar(){
+        animateSeekBar(this,  -130f);
+        this.active = false;
+    }
+
+    public void showSeekBar(){
+        animateSeekBar(this,  0f);
+        this.active = true;
+    }
+
+
+    public void setListener(GetWidthCallBack listener) {
+        this.listener = listener;
+    }
+
+    public interface GetWidthCallBack{
+        void getWidth(int width);
     }
 
 }

@@ -33,6 +33,7 @@ public class CustomPhotoDraw extends CustomPhotoView {
     private Paint paint; // кисть
     private Path path; // путь
     private int color = Color.parseColor("red");
+    private int width = 5;
     private float canvasScale;
     private float canvasDx;
     private float canvasDy;
@@ -47,32 +48,8 @@ public class CustomPhotoDraw extends CustomPhotoView {
         init();
     }
 
-    private void init(){
-        initNewPaint(color, 5);
-    }
-
-    private void initNewPaint(int color, int w){
-        paint = new Paint();
-        paint.setColor(color);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(5);
-        paint.setAntiAlias(true);
-
-    }
-
     @Override
     public void setImageDrawable(Drawable drawable){
-        super.setImageDrawable(drawable);
-        fitCanvas();
-        drawBitmap = Bitmap.createBitmap((int) (drawable.getIntrinsicWidth() * canvasScale + canvasDx), (int) (drawable.getIntrinsicHeight() * canvasScale + canvasDy) , Bitmap.Config.ARGB_8888);
-        drawCanvas = new Canvas(drawBitmap);
-
-        invalidate();
-    }
-
-
-    public void setImageBitmap(Bitmap bitmap){
-        Drawable drawable = new BitmapDrawable(getResources(), bitmap);
         super.setImageDrawable(drawable);
         fitCanvas();
         drawBitmap = Bitmap.createBitmap((int) (drawable.getIntrinsicWidth() * canvasScale + canvasDx), (int) (drawable.getIntrinsicHeight() * canvasScale + canvasDy) , Bitmap.Config.ARGB_8888);
@@ -90,16 +67,40 @@ public class CustomPhotoDraw extends CustomPhotoView {
             canvas.drawBitmap(drawBitmap, 0, 0, null);
         }
 
+        Log.d("aa88", "paths.size(): " + paths.size() + " : " + paints.size());
         for (int i = 0; i < paths.size(); i++) {
             canvas.drawPath(paths.get(i), paints.get(i));
         }
+    }
+
+    private void init(){
+        initNewPaint(color);
+    }
+
+    private void initNewPaint(int color){
+        paint = new Paint();
+        paint.setColor(color);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setStrokeWidth(width);
+        paint.setAntiAlias(true);
+
+    }
+
+    public void setImageBitmap(Bitmap bitmap){
+        Drawable drawable = new BitmapDrawable(getResources(), bitmap);
+        super.setImageDrawable(drawable);
+        fitCanvas();
+        drawBitmap = Bitmap.createBitmap((int) (drawable.getIntrinsicWidth() * canvasScale + canvasDx), (int) (drawable.getIntrinsicHeight() * canvasScale + canvasDy) , Bitmap.Config.ARGB_8888);
+        drawCanvas = new Canvas(drawBitmap);
+
+        invalidate();
     }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
-//        getScaleGestureDetector().onTouchEvent(event);
+
         switch (typeEvent){
             case DRAW: return drawPaths(event);
             case ERASE: return erasePaths(event);
@@ -200,10 +201,16 @@ public class CustomPhotoDraw extends CustomPhotoView {
     }
 
     public void clearDraw(){
-        if (drawBitmap != null){
-            drawBitmap.eraseColor(Color.TRANSPARENT);
-            invalidate();
-        }
+        paths.clear();
+        paints.clear();
+        invalidate();
+    }
+
+    public void deleteLastPath(){
+        if (paints.isEmpty() || paths.isEmpty()) return;
+        paints.remove(paints.size() - 1);
+        paths.remove(paths.size() - 1);
+        invalidate();
     }
 
     public Bitmap getCombinedBitmap(){
@@ -232,7 +239,7 @@ public class CustomPhotoDraw extends CustomPhotoView {
     }
 
     protected void setColor(int color){
-        initNewPaint(color, 30);
+        initNewPaint(color);
         this.color = color;
     }
 
@@ -255,6 +262,11 @@ public class CustomPhotoDraw extends CustomPhotoView {
             canvasDx = (viewWidth - drawableWidth * canvasScale) / 2;
             canvasDy = 0;
         }
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+        initNewPaint(color);
     }
 
     protected void setType(EditTypeEvent type){
