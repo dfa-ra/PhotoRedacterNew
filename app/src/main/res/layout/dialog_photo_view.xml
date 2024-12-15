@@ -60,21 +60,37 @@
             android:background="@drawable/map_fragment_buttons_background">
 
             <Button
-                android:id="@+id/edit"
+                android:id="@+id/draw"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:visibility="gone"
+                android:visibility="visible"
+                android:background="@drawable/pencil" />
 
-                android:background="@android:drawable/ic_menu_edit" />
+            <Button
+                android:layout_marginStart="10dp"
+                android:id="@+id/crop"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:visibility="visible"
+                android:background="@drawable/crop" />
         </LinearLayout>
 
     </RelativeLayout>
 
-    <com.example.photoredacternew.viewDialog.photoEditer.CustomDrawerRelativeLayout
+    <com.example.photoredacternew.viewDialog.photoDrawer.CustomDrawerRelativeLayout
         android:id="@+id/full_image_draw_relative_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="invisible">
+    </com.example.photoredacternew.viewDialog.photoDrawer.CustomDrawerRelativeLayout>
 
-    </com.example.photoredacternew.viewDialog.photoEditer.CustomDrawerRelativeLayout>
+    <com.example.photoredacternew.viewDialog.photoCropper.CustomCropperRelativeLayout
+        android:id="@+id/full_image_crop_relative_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible">
+
+    </com.example.photoredacternew.viewDialog.photoCropper.CustomCropperRelativeLayout>
+
+
 </RelativeLayout>

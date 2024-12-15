@@ -13,7 +13,9 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 
 import com.example.photoredacternew.databinding.DialogPhotoViewBinding;
-import com.example.photoredacternew.viewDialog.photoEditer.GetEditedBitmapCallBack;
+import com.example.photoredacternew.viewDialog.photoDrawer.GetEditedBitmapCallBack;
+
+import kotlin._Assertions;
 
 /**
  * далог для рассматривания изображений
@@ -60,7 +62,7 @@ public class PhotoDialog extends Dialog implements GetEditedBitmapCallBack {
         this.binding.destroy.setOnClickListener(clc -> this.dismiss());
 
         // кнопка открытия панели измменения фото
-        binding.edit.setOnClickListener(view -> {
+        binding.draw.setOnClickListener(view -> {
             binding.fullImageDrawRelativeLayout.setVisibility(View.VISIBLE);
             binding.fullImageViewRelativeLayout.setVisibility(View.GONE);
             binding.fullImageDrawRelativeLayout.setImageBitmap(bitmap);
@@ -72,6 +74,18 @@ public class PhotoDialog extends Dialog implements GetEditedBitmapCallBack {
             binding.fullImageViewRelativeLayout.setVisibility(View.VISIBLE);
             binding.fullImageDrawRelativeLayout.closeFullImageDraw();
         });
+
+        binding.fullImageCropRelativeLayout.getClose().setOnClickListener(view -> {
+            binding.fullImageCropRelativeLayout.setVisibility(View.GONE);
+            binding.fullImageViewRelativeLayout.setVisibility(View.VISIBLE);
+//            binding.fullImageCropRelativeLayout.closeFullImageDraw();
+        });
+
+        binding.crop.setOnClickListener(view -> {
+            binding.fullImageCropRelativeLayout.setImageBitmap(bitmap);
+            binding.fullImageCropRelativeLayout.setVisibility(View.VISIBLE);
+            binding.fullImageViewRelativeLayout.setVisibility(View.GONE);
+        });
     }
 
     // отрисовать изображение
@@ -79,11 +93,12 @@ public class PhotoDialog extends Dialog implements GetEditedBitmapCallBack {
         Log.d("aa99", "start drawPhoto");
         // спрятать загрузку
         this.binding.loadAnimation.setVisibility(View.GONE);
-        this.binding.edit.setVisibility(View.VISIBLE);
+        this.binding.draw.setVisibility(View.VISIBLE);
 
         // отрисовать фотку
         this.binding.fullImageView.setImageDrawable(photo);
         this.binding.fullImageDrawRelativeLayout.setListener(this);
+        this.binding.fullImageCropRelativeLayout.setListener(this);
         this.bitmap = photo.getBitmap();
 
         this.binding.fullImageDrawRelativeLayout.setImageBitmap(bitmap);
@@ -96,9 +111,17 @@ public class PhotoDialog extends Dialog implements GetEditedBitmapCallBack {
     }
 
     @Override
-    public void getEditedBitmap(Bitmap bitmap) {
+    public void getDrawnBitmap(Bitmap bitmap) {
         this.bitmap = bitmap;
         binding.fullImageDrawRelativeLayout.setVisibility(View.GONE);
+        binding.fullImageViewRelativeLayout.setVisibility(View.VISIBLE);
+        binding.fullImageView.setImageDrawable(new BitmapDrawable(getContext().getResources(), bitmap));
+    }
+
+    @Override
+    public void getCroppedBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
+        binding.fullImageCropRelativeLayout.setVisibility(View.GONE);
         binding.fullImageViewRelativeLayout.setVisibility(View.VISIBLE);
         binding.fullImageView.setImageDrawable(new BitmapDrawable(getContext().getResources(), bitmap));
     }

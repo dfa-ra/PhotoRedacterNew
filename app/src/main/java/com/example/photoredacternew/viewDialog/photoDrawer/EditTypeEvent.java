@@ -1,4 +1,4 @@
-package com.example.photoredacternew.viewDialog.photoEditer;
+package com.example.photoredacternew.viewDialog.photoDrawer;
 
 public enum EditTypeEvent {
     DRAW,

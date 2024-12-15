@@ -1,4 +1,4 @@
-package com.example.photoredacternew.viewDialog.photoEditer;
+package com.example.photoredacternew.viewDialog.photoDrawer;
 
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
@@ -14,7 +14,6 @@ import androidx.annotation.Nullable;
 
 import com.example.photoredacternew.R;
 import com.example.photoredacternew.databinding.EditPanelLayoutBinding;
-import com.example.photoredacternew.viewDialog.photoEditer.customView.VerticalSeekBar;
 
 public class EditPanel extends LinearLayout {
     public EditPanelLayoutBinding binding;

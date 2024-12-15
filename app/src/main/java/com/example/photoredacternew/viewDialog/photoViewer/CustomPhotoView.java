@@ -26,12 +26,13 @@ public class CustomPhotoView extends AppCompatImageView {
     protected Matrix matrix;
     private ScaleGestureDetector scaleGestureDetector;
     private GestureDetector gestureDetector;
-    private float minScale = 0f;
-    private float maxScale = 0f;
+    public float minScale = 0f;
+    public float maxScale = 0f;
     private float doubleTapZoomScale = 0f;
     private boolean isZoomed = false;
     protected float currentScale = 0f;
-
+    private float dx, dy;
+    private float limit_x = 0, limit_y = 0;
     public CustomPhotoView(Context context, AttributeSet attr) {
         super(context, attr);
         init(context);
@@ -90,15 +91,15 @@ public class CustomPhotoView extends AppCompatImageView {
         float drawableWidth = drawable.getIntrinsicWidth();
         float drawableHeight = drawable.getIntrinsicHeight();
 
-        float scale, dx, dy;
+        float scale;
         if (viewWidth / drawableWidth < viewHeight / drawableHeight) {
-            scale = viewWidth / drawableWidth;
-            dx = 0;
+            scale = (viewWidth - 2 * limit_x) / drawableWidth;
+            dx = limit_x;
             dy = (viewHeight - drawableHeight * scale) / 2;
         } else {
-            scale = viewHeight / drawableHeight;
+            scale = (viewHeight - 2 * limit_y) / drawableHeight;
             dx = (viewWidth - drawableWidth * scale) / 2;
-            dy = 0;
+            dy = limit_y;
         }
 
         currentScale = scale;  // Устанавливаем начальный масштаб
@@ -108,7 +109,7 @@ public class CustomPhotoView extends AppCompatImageView {
     }
 
     // проверка на всякие ограничения
-    private void checkBounds() {
+    public void checkBounds() {
         Drawable drawable = getDrawable();
         if (drawable == null) return;
 
@@ -168,7 +169,7 @@ public class CustomPhotoView extends AppCompatImageView {
     }
 
     // анимация зума
-    private void animateZoom(float focusX, float focusY) {
+    public void animateZoom(float focusX, float focusY) {
         float startScale = currentScale;
         float endScale = isZoomed ? minScale : currentScale + doubleTapZoomScale;
         isZoomed = !isZoomed;
@@ -206,6 +207,23 @@ public class CustomPhotoView extends AppCompatImageView {
         });
 
         animator.start();
+    }
+
+    public void setLimit_xy(float limit_x, float limit_y) {
+        this.limit_x = limit_x;
+        this.limit_y = limit_y;
+    }
+
+    public float getCurrentScale() {
+        return currentScale;
+    }
+
+    public float getDx() {
+        return dx;
+    }
+
+    public float getDy() {
+        return dy;
     }
 
     public ScaleGestureDetector getScaleGestureDetector() {

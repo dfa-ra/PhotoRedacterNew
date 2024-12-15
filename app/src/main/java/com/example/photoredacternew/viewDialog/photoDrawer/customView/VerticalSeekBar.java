@@ -1,4 +1,4 @@
-package com.example.photoredacternew.viewDialog.photoEditer.customView;
+package com.example.photoredacternew.viewDialog.photoDrawer.customView;
 
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
