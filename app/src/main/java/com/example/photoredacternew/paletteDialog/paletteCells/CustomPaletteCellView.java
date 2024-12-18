@@ -12,10 +12,17 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+/**
+ * Класс отвещающий за одну клетку палитры
+ */
 public class CustomPaletteCellView extends View {
+    // флаг выбрана ли клетка или нет
     private boolean isSelect = false;
+    // цвет данной клетки
     private int color;
+    // прозрачность клетки
     private int alpha = 0;
+    // рамка клетки (зависит от цвета может быть чёрной или белой)
     private Paint border;
 
     public CustomPaletteCellView(Context context, @Nullable AttributeSet attrs, int color) {
@@ -29,7 +36,7 @@ public class CustomPaletteCellView extends View {
         this.color = color;
         init();
     }
-
+    // инициализация всех основных параметров
     private void init(){
         setBackgroundColor(color);
         border = new Paint();
@@ -51,6 +58,9 @@ public class CustomPaletteCellView extends View {
     public void click(){
         toggleBorder();
     }
+
+    // метод изменения выбранной клетки
+    // анимация выбора или не выбора (рамка плавно проявляется и исчезает)
     private void toggleBorder() {
         int targetAlpha = isSelect ? 0 : 255;
         ValueAnimator animator = ValueAnimator.ofInt(alpha, targetAlpha);
@@ -65,11 +75,13 @@ public class CustomPaletteCellView extends View {
         isSelect = !isSelect;
     }
 
+
     public int getColor() {
         if (isSelect) return color;
         return -1;
     }
 
+    // метод определения теплоты цвета для установки определённого цвета рамки
     public static int getBrightness(int color) {
         int red = (color >> 16) & 0xFF;
         int green = (color >> 8) & 0xFF;

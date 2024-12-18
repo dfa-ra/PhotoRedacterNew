@@ -8,9 +8,13 @@ import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.SeekBar;
 
+/**
+ * Класс отвечающий за вертикальный ползунок установки толщины кисти
+ */
 @SuppressLint("AppCompatCustomView")
 public class VerticalSeekBar extends SeekBar {
 
+    // активирован ли он или нет
     private boolean active = false;
     private GetWidthCallBack listener;
 

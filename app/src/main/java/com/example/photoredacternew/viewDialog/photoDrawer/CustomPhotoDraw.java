@@ -23,6 +23,10 @@ import com.example.photoredacternew.viewDialog.photoViewer.CustomPhotoView;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Класс отвещающий за основное место для рисования
+ * т.е. это лайаут в котором есть само изображение и канвас на котором рисуют по верху
+ */
 public class CustomPhotoDraw extends CustomPhotoView {
 
     private Bitmap drawBitmap;
@@ -33,6 +37,7 @@ public class CustomPhotoDraw extends CustomPhotoView {
     private EditTypeEvent currentEvent = EditTypeEvent.NONE;
     private EditTypeEvent oldEvent = EditTypeEvent.NONE;
 
+    // пути и кисти для этих путей
     private final List<Path> paths = new ArrayList<>();
     private final List<Paint> paints = new ArrayList<>();
 
@@ -41,6 +46,7 @@ public class CustomPhotoDraw extends CustomPhotoView {
         initPaint();
     }
 
+    // инициалиация основных параметров
     private void initPaint() {
         currentPaint = new Paint();
         currentPaint.setColor(currentColor);
@@ -62,6 +68,7 @@ public class CustomPhotoDraw extends CustomPhotoView {
         createDrawBitmap(drawable);
     }
 
+    // создание битммапы для рисования
     private void createDrawBitmap(Drawable drawable) {
         if (drawable == null) return;
 
@@ -96,17 +103,16 @@ public class CustomPhotoDraw extends CustomPhotoView {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
 
+        // если пальцев более одного то реализуем onTouch родителя
         if (event.getPointerCount() > 1) {
             currentEvent = EditTypeEvent.NONE;
-
-            return super.onTouchEvent(event); // Handle zoom and scroll in parent class
+            return super.onTouchEvent(event);
         }
-        Log.d("aa88", "currentEvent: " + currentEvent + " : " + oldEvent );
 
+        // проверка на нежелательные вызовы onTouch
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             currentEvent = oldEvent;
         }
-
 
         switch (currentEvent) {
             case DRAW:
@@ -119,6 +125,7 @@ public class CustomPhotoDraw extends CustomPhotoView {
         }
     }
 
+    // управление рисованием + реализация самого рисования
     private boolean handleDraw(MotionEvent event) {
 
         float[] touchPoint = {event.getX(), event.getY()};
@@ -150,6 +157,7 @@ public class CustomPhotoDraw extends CustomPhotoView {
     }
 
 
+    // управление стиранием
     private boolean handleErase(MotionEvent event){
         float[] touchPoint = {event.getX(), event.getY()};
         Matrix inverseMatrix = new Matrix();
@@ -165,6 +173,7 @@ public class CustomPhotoDraw extends CustomPhotoView {
         return super.onTouchEvent(event);
     }
 
+    // метод стирания
     private void erasePathAtPoint(float x, float y) {
         Log.d("aa88", "eraser");
 
@@ -231,11 +240,12 @@ public class CustomPhotoDraw extends CustomPhotoView {
         return (scaleX + scaleY) / 2;
     }
 
+    // изменение размера кисти
     private float adjustBrushSize(float baseBrushWidth) {
         return baseBrushWidth / getScaleFromMatrix();
     }
 
-
+    // метод отчистки всего
     public void clearAll(){
         paths.clear();
         paints.clear();
@@ -245,6 +255,7 @@ public class CustomPhotoDraw extends CustomPhotoView {
         invalidate();
     }
 
+    // отменить последнее действие рисования
     public void undoLastPath() {
         if (!paths.isEmpty() && !paints.isEmpty()) {
             paths.remove(paths.size() - 1);
@@ -253,6 +264,7 @@ public class CustomPhotoDraw extends CustomPhotoView {
         }
     }
 
+    // собрать основной битмап и битмап для рисование в один итоговый битмап
     public Bitmap getCombinedBitmap() {
         Drawable drawable = getDrawable();
         if (drawable == null || !(drawable instanceof BitmapDrawable)) {
@@ -278,11 +290,11 @@ public class CustomPhotoDraw extends CustomPhotoView {
         return combinedBitmap;
     }
 
+
     public void setCurrentEvent(EditTypeEvent currentEvent) {
         this.currentEvent = currentEvent;
         oldEvent = currentEvent;
     }
-
 }
 
 

@@ -13,15 +13,13 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 
 import com.example.photoredacternew.databinding.DialogPhotoViewBinding;
-import com.example.photoredacternew.viewDialog.photoDrawer.GetEditedBitmapCallBack;
+import com.example.photoredacternew.viewDialog.photoDrawer.IEditedBitmapCallBack;
 
-import kotlin._Assertions;
 
 /**
- * далог для рассматривания изображений
+ * далог для рассматривания изображений и возмжного изменения изображения
  */
-
-public class PhotoDialog extends Dialog implements GetEditedBitmapCallBack {
+public class PhotoDialog extends Dialog implements IEditedBitmapCallBack {
 
     private final DialogPhotoViewBinding binding;
     private Bitmap bitmap;
@@ -111,7 +109,7 @@ public class PhotoDialog extends Dialog implements GetEditedBitmapCallBack {
     }
 
     @Override
-    public void getDrawnBitmap(Bitmap bitmap) {
+    public void onDrawnBitmap(Bitmap bitmap) {
         this.bitmap = bitmap;
         binding.fullImageDrawRelativeLayout.setVisibility(View.GONE);
         binding.fullImageViewRelativeLayout.setVisibility(View.VISIBLE);
@@ -119,7 +117,7 @@ public class PhotoDialog extends Dialog implements GetEditedBitmapCallBack {
     }
 
     @Override
-    public void getCroppedBitmap(Bitmap bitmap) {
+    public void onCroppedBitmap(Bitmap bitmap) {
         this.bitmap = bitmap;
         binding.fullImageCropRelativeLayout.setVisibility(View.GONE);
         binding.fullImageViewRelativeLayout.setVisibility(View.VISIBLE);

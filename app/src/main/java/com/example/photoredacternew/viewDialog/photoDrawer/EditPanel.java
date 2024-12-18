@@ -15,6 +15,10 @@ import androidx.annotation.Nullable;
 import com.example.photoredacternew.R;
 import com.example.photoredacternew.databinding.EditPanelLayoutBinding;
 
+/**
+ * Класс лайаута основной панели редактирования
+ *
+ */
 public class EditPanel extends LinearLayout {
     public EditPanelLayoutBinding binding;
     private Drawable fill;
@@ -29,7 +33,6 @@ public class EditPanel extends LinearLayout {
         super(context, attrs);
         init(context);
     }
-
 
     @SuppressLint("UseCompatLoadingForDrawables")
     private void init(Context context){
@@ -47,15 +50,14 @@ public class EditPanel extends LinearLayout {
     }
 
     protected void setSelectedColor(int color) {
-        fill.setColorFilter(color, PorterDuff.Mode.SRC); // Замените RED на нужный цвет
-        fill.setColorFilter(color, PorterDuff.Mode.SRC); // Замените RED на нужный цвет
+        fill.setColorFilter(color, PorterDuff.Mode.SRC);
         binding.color.setBackground(layerDrawable);
     }
 
     // Анимация для выдвижения/защелкивания SeekBar
     public void animateEditPanel(EditPanel editPanel, float targetTranslationX) {
         ObjectAnimator animator = ObjectAnimator.ofFloat(editPanel, "translationX", targetTranslationX);
-        animator.setDuration(200); // продолжительность анимации
+        animator.setDuration(200);
         animator.start();
     }
 

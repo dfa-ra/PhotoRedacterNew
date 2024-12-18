@@ -16,19 +16,27 @@ import com.example.photoredacternew.R;
 import com.example.photoredacternew.databinding.ColorPaletteViewBinding;
 import com.example.photoredacternew.paletteDialog.paletteCells.CustomPaletteGridLayout;
 import com.example.photoredacternew.paletteDialog.transparencySeekBar.TransparencySeekBarView;
+import com.example.photoredacternew.viewDialog.PhotoDialog;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.tabs.TabLayout;
 
-public class CustomPaletteSheet extends BottomSheetDialogFragment implements GetSellColorCallBack {
+/**
+ * Класс отвечающий за диалог палитры
+ */
+public class CustomPaletteSheet extends BottomSheetDialogFragment implements CustomPaletteGridLayout.SellColorCallBack, TransparencySeekBarView.UpdateTransparencyCallBack {
+    private ColorPaletteViewBinding binding;
 
+    // кастомное вью ползунка отвечающего за прозрачность
     private TransparencySeekBarView transparencySeekBar;
+
+    // кастомное вью отвечающее за саму таблицу палитры
     private CustomPaletteGridLayout paletteGridLayout;
 
     private ColorCallBack listener;
 
+    // итоговый выбранный цвет
     private int selectedColor;
-    private ColorPaletteViewBinding binding;
 
 
     public CustomPaletteSheet(ColorCallBack listener){
@@ -52,22 +60,26 @@ public class CustomPaletteSheet extends BottomSheetDialogFragment implements Get
         binding = ColorPaletteViewBinding.inflate(LayoutInflater.from(context));
 
         paletteGridLayout = binding.paletteTable;
-        paletteGridLayout.setListener(this);
-
         transparencySeekBar = binding.layoutSeekBar;
-        transparencySeekBar.setListner(this);
+
+        setListeners();
 
         binding.layoutSeekBar.setupBrightnessSeekBar();
     }
 
+    private void setListeners(){
+        paletteGridLayout.setListener(this);
+        transparencySeekBar.setListner(this);
+    }
+
     @Override
-    public void getSelectedColor(int color) {
+    public void onSelectedColor(int color) {
         selectedColor = color;
         transparencySeekBar.setColor(color);
     }
 
     @Override
-    public void getUpdateTransparency(int color) {
+    public void onUpdateTransparency(int color) {
         selectedColor = color;
     }
 
@@ -103,4 +115,5 @@ public class CustomPaletteSheet extends BottomSheetDialogFragment implements Get
     public interface ColorCallBack {
         void getSelectedColor(int color);
     }
+
 }

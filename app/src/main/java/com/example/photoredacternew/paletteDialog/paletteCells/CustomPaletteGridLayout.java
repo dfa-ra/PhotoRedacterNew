@@ -5,7 +5,13 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.GridLayout;
 
-import com.example.photoredacternew.paletteDialog.GetSellColorCallBack;
+import com.example.photoredacternew.paletteDialog.CustomPaletteSheet;
+
+import java.util.stream.IntStream;
+
+/**
+ * Класс лайаута всех клеток (т.е. именно палитры, таблички с клетками)
+ */
 
 public class CustomPaletteGridLayout extends GridLayout{
 
@@ -30,14 +36,19 @@ public class CustomPaletteGridLayout extends GridLayout{
     };
 
 
+    // количество колонок в палитре
     private final int columnsCount = headRowsColorArray.length + 1;
+    // количество строк в палитре
     private final int rowsCount = headRowsColorArray.length;
+
+    // Объект выбранной в данный момент ячейки
     private CustomPaletteCellView selectedColor = null;
 
-    private GetSellColorCallBack listener;
+    // Коллбек выбранного цвета
+    private SellColorCallBack listener;
 
 
-    public void setListener(GetSellColorCallBack listener){
+    public void setListener(SellColorCallBack listener){
         this.listener = listener;
     }
 
@@ -55,11 +66,14 @@ public class CustomPaletteGridLayout extends GridLayout{
         removeAllViews();  // Очищаем таблицу перед добавлением
         setColumnCount(columnsCount);
 
+        // после создания таблицы выдаём цвета каждой ячейке
         post(() ->{
-            for (int j = 0; j < columnsCount; j++){
-                int color = interpolateColor(black, white, (float) j / (columnsCount - 1));
-                setColor(color);
-            }
+
+            IntStream.range(0, columnsCount)
+                    .forEach(j -> {
+                        int color = interpolateColor(black, white, (float) j / (columnsCount - 1));
+                        setColor(color);
+                    });
 
             for (int i = 1; i < rowsCount; i++) {
                 for (int j = 0; j < columnsCount; j++){
@@ -83,10 +97,13 @@ public class CustomPaletteGridLayout extends GridLayout{
                     setColor(color);
                 }
             }
+
+            // выбираем самую первую ячейку
             getChildAt(0).callOnClick();
         });
     }
 
+    // метод выбора цвета
     private void setColor(int color){
         CustomPaletteCellView colorView = new CustomPaletteCellView(getContext(), color);
 
@@ -104,7 +121,7 @@ public class CustomPaletteGridLayout extends GridLayout{
                 colorView.click();
                 selectedColor = colorView;
             }
-            listener.getSelectedColor(selectedColor.getColor());
+            listener.onSelectedColor(selectedColor.getColor());
         });
         // Добавляем ячейку в таблицу
         addView(colorView);
@@ -114,6 +131,7 @@ public class CustomPaletteGridLayout extends GridLayout{
         return selectedColor.getColor();
     }
 
+    // метод интерполяции цветов для получения нужно для установки в палитру
     private int interpolateColor(int colorStart, int colorEnd, float fraction) {
         int startA = (colorStart >> 24) & 0xFF;
         int startR = (colorStart >> 16) & 0xFF;
@@ -133,5 +151,9 @@ public class CustomPaletteGridLayout extends GridLayout{
         return (resultA << 24) | (resultR << 16) | (resultG << 8) | resultB;
     }
 
+    // интерфейс каллбека
+    public interface SellColorCallBack {
+        void onSelectedColor(int color);
+    }
 
 }

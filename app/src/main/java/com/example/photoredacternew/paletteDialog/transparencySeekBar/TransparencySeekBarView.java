@@ -18,15 +18,24 @@ import androidx.annotation.Nullable;
 
 import com.example.photoredacternew.R;
 import com.example.photoredacternew.databinding.TransparencySeekBarViewBinding;
-import com.example.photoredacternew.paletteDialog.GetSellColorCallBack;
+import com.example.photoredacternew.paletteDialog.CustomPaletteSheet;
 
 
+/**
+ * Класс отвечающий за ползунок выбора прозрачности
+ */
 public class TransparencySeekBarView extends FrameLayout {
     private TransparencySeekBarViewBinding binding;
-    private GetSellColorCallBack listner;
+
+    private UpdateTransparencyCallBack listner;
+
+    // картинки для адекватного фона ползунка
     private Drawable fill;
     private Drawable border;
+
+    // полученный цвет
     private int new_color;
+
     LayerDrawable layerDrawable;
 
 
@@ -40,6 +49,7 @@ public class TransparencySeekBarView extends FrameLayout {
         init(context);
     }
 
+    // инициализация основных полей
     @SuppressLint("UseCompatLoadingForDrawables")
     private void init(Context context){
         binding = TransparencySeekBarViewBinding.inflate(LayoutInflater.from(context), this, true);
@@ -50,7 +60,7 @@ public class TransparencySeekBarView extends FrameLayout {
     }
 
     public void setThumbColor(int color){
-        fill.setColorFilter(color, PorterDuff.Mode.SRC); // Замените RED на нужный цвет
+        fill.setColorFilter(color, PorterDuff.Mode.SRC);
         binding.transparencySeekBar.setThumb(layerDrawable);
     }
 
@@ -76,7 +86,7 @@ public class TransparencySeekBarView extends FrameLayout {
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 Log.d("aa99", "color: " + new_color);
                 new_color = adjustAlpha(new_color, progress);
-                listner.getUpdateTransparency(new_color);
+                listner.onUpdateTransparency(new_color);
                 setThumbColor(new_color);
             }
 
@@ -89,10 +99,11 @@ public class TransparencySeekBarView extends FrameLayout {
     }
 
 
-    public void setListner(GetSellColorCallBack listner) {
+    public void setListner(UpdateTransparencyCallBack listner) {
         this.listner = listner;
     }
 
+    // метод подсчёта прозрачности
     private int adjustAlpha(int color, int alpha) {
         float[] hsv = new float[3];
         Color.colorToHSV(color, hsv);
@@ -100,5 +111,10 @@ public class TransparencySeekBarView extends FrameLayout {
 
         Log.d("aa99", "adjustAlpha: " + color + "  " + alpha);
         return Color.HSVToColor(alpha255, hsv);
+    }
+
+
+    public interface UpdateTransparencyCallBack {
+        void onUpdateTransparency(int color);
     }
 }

@@ -8,12 +8,15 @@ import android.view.View;
 import android.widget.RelativeLayout;
 
 import com.example.photoredacternew.databinding.CropperLayoutBinding;
-import com.example.photoredacternew.viewDialog.photoDrawer.GetEditedBitmapCallBack;
+import com.example.photoredacternew.viewDialog.photoDrawer.IEditedBitmapCallBack;
 
+/**
+ * Класс отвещающий за окно обрезки фото
+ */
 public class CustomCropperRelativeLayout extends RelativeLayout {
 
     private CropperLayoutBinding binding;
-    private GetEditedBitmapCallBack listener;
+    private IEditedBitmapCallBack listener;
 
     public CustomCropperRelativeLayout(Context context) {
         super(context);
@@ -32,7 +35,7 @@ public class CustomCropperRelativeLayout extends RelativeLayout {
 
     private void actions(){
         binding.doEdit.setOnClickListener(view->{
-            listener.getCroppedBitmap(binding.fullImageCrop.cropImage());
+            listener.onCroppedBitmap(binding.fullImageCrop.cropImage());
         });
 
         binding.resetAll.setOnClickListener(view -> {
@@ -44,7 +47,7 @@ public class CustomCropperRelativeLayout extends RelativeLayout {
         return binding.exit;
     }
 
-    public void setListener(GetEditedBitmapCallBack listener) {
+    public void setListener(IEditedBitmapCallBack listener) {
         this.listener = listener;
     }
 

@@ -16,14 +16,20 @@ import com.example.photoredacternew.databinding.DrawerLayoutBinding;
 import com.example.photoredacternew.paletteDialog.CustomPaletteSheet;
 import com.example.photoredacternew.viewDialog.photoDrawer.customView.VerticalSeekBar;
 
+
+/**
+ * Класс отвечающий за окно рисования на изображении
+ */
 public class CustomDrawerRelativeLayout extends RelativeLayout implements CustomPaletteSheet.ColorCallBack, VerticalSeekBar.GetWidthCallBack {
     private DrawerLayoutBinding binding;
 
+    // диалог палитры
     private CustomPaletteSheet customPaletteSheet;
-    private GetEditedBitmapCallBack listener;
-    private boolean verticalLayoutOpeningFlag = false;
+
+    private IEditedBitmapCallBack listener;
+
+    // флаг глазика для видимости худа
     private boolean eye_closed = false;
-    private int selected_color = 0;
 
 
 
@@ -37,6 +43,7 @@ public class CustomDrawerRelativeLayout extends RelativeLayout implements Custom
         init(context);
     }
 
+    // инициализация оновных полей
     private void init(Context context){
         binding = DrawerLayoutBinding.inflate(LayoutInflater.from(context), this, true);
         customPaletteSheet = new CustomPaletteSheet(this);
@@ -44,7 +51,10 @@ public class CustomDrawerRelativeLayout extends RelativeLayout implements Custom
         actions();
     }
 
+    // метод всех действий на окне
     private void actions(){
+
+        // выбор цвета
         binding.editPanel.binding.color.setOnClickListener(view -> {
             Log.d("aa88", "color.setOnClickListener");
             DialogsManager.getInstanceWithActivity().showDialog(customPaletteSheet);
@@ -53,12 +63,14 @@ public class CustomDrawerRelativeLayout extends RelativeLayout implements Custom
             binding.widthView.setVisibility(GONE);
         });
 
+        // применить изменения
         binding.doEdit.setOnClickListener(view->{
-            listener.getDrawnBitmap(binding.fullImageDraw.getCombinedBitmap());
+            listener.onDrawnBitmap(binding.fullImageDraw.getCombinedBitmap());
             binding.seekBar.deactivateSeekBar();
             binding.widthView.setVisibility(GONE);
         });
 
+        // начать рисовать
         binding.editPanel.binding.pencil.setOnClickListener(view -> {
             binding.editPanel.binding.eraser.animate().scaleX(1f).scaleY(1f).setDuration(150).start();
             binding.editPanel.binding.pencil.animate().scaleX(1.25f).scaleY(1.25f).setDuration(150).start();
@@ -67,6 +79,7 @@ public class CustomDrawerRelativeLayout extends RelativeLayout implements Custom
             binding.widthView.setVisibility(GONE);
         });
 
+        // начать стирать
         binding.editPanel.binding.eraser.setOnClickListener(view -> {
             binding.editPanel.binding.eraser.animate().scaleX(1.25f).scaleY(1.25f).setDuration(150).start();
             binding.editPanel.binding.pencil.animate().scaleX(1f).scaleY(1f).setDuration(150).start();
@@ -75,6 +88,7 @@ public class CustomDrawerRelativeLayout extends RelativeLayout implements Custom
             binding.widthView.setVisibility(GONE);
         });
 
+        // убрать или проявить худ
         binding.eye.setOnClickListener(view -> {
             if (!eye_closed) {
                 binding.eye.setBackgroundResource(R.drawable.eye_closed);
@@ -90,14 +104,17 @@ public class CustomDrawerRelativeLayout extends RelativeLayout implements Custom
             eye_closed = !eye_closed;
         });
 
+        // отчистить всё
         binding.clearAll.setOnClickListener(view -> {
             binding.fullImageDraw.clearAll();
         });
 
+        // отменить последней нарисованный путь
         binding.back.setOnClickListener(view -> {
             binding.fullImageDraw.undoLastPath();
         });
 
+        // изменить толщину кисти
         binding.seekBar.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -112,14 +129,13 @@ public class CustomDrawerRelativeLayout extends RelativeLayout implements Custom
     public void getSelectedColor(int color) {
         binding.editPanel.setSelectedColor(color);
         binding.fullImageDraw.setColor(color);
-        selected_color = color;
     }
 
     public void setImageBitmap(Bitmap bitmap){
         binding.fullImageDraw.setImageBitmap(bitmap);
     }
 
-    public void setListener(GetEditedBitmapCallBack listener) {
+    public void setListener(IEditedBitmapCallBack listener) {
         this.listener = listener;
     }
 
@@ -127,12 +143,9 @@ public class CustomDrawerRelativeLayout extends RelativeLayout implements Custom
         return binding.exit;
     }
 
-
-
     public void closeFullImageDraw(){
         binding.fullImageDraw.clearAll();
     }
-
 
     @Override
     public void getWidth(int width) {

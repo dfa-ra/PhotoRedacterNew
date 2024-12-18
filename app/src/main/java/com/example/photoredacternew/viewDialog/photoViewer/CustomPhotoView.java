@@ -20,7 +20,9 @@ import android.view.animation.DecelerateInterpolator;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
-
+/**
+ * Класс отвещающий за просмотр фото, его скролл, зум двумя пальцами, зум двойным нажатием
+ */
 public class CustomPhotoView extends AppCompatImageView {
 
     protected Matrix matrix;
@@ -33,6 +35,7 @@ public class CustomPhotoView extends AppCompatImageView {
     protected float currentScale = 0f;
     private float dx, dy;
     private float limit_x = 0, limit_y = 0;
+
     public CustomPhotoView(Context context, AttributeSet attr) {
         super(context, attr);
         init(context);
@@ -226,10 +229,4 @@ public class CustomPhotoView extends AppCompatImageView {
         return dy;
     }
 
-    public ScaleGestureDetector getScaleGestureDetector() {
-        return scaleGestureDetector;
-    }
-    public GestureDetector getGestureDetector(){
-        return gestureDetector;
-    }
 }

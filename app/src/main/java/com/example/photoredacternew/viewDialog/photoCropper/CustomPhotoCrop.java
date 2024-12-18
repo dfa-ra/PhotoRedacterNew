@@ -16,10 +16,18 @@ import android.view.MotionEvent;
 
 import com.example.photoredacternew.viewDialog.photoViewer.CustomPhotoView;
 
+
+/**
+ * Класс оттвечающий за основной лайаути на котором отображается фото при обрезани
+ * т.е. именно то место куда вставляется само фото
+ */
 public class CustomPhotoCrop extends CustomPhotoView {
+
     private RectF cropRect; // Прямоугольник обрезки
     private ChangeFrame movingEdge = null; // Сторона или угол, которую перемещаем
-    private boolean startCropFlag = false;
+
+    private boolean startCropFlag = false; // нужен чтобы обрабатывать ложные нажатия
+
     public CustomPhotoCrop(Context context, AttributeSet attrs) {
         super(context, attrs);
         initCropTools();
@@ -34,24 +42,37 @@ public class CustomPhotoCrop extends CustomPhotoView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        // Отрисовка прямоугольника
-        Paint paint = new Paint();
-        paint.setColor(Color.WHITE);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(15);
-        paint.setPathEffect(new DashPathEffect(new float[]{20, 10}, 0));
-        canvas.drawRect(cropRect, paint);
+        // Отрисовка затемнения за пределами cropRect
+        Paint dimPaint = new Paint();
+        dimPaint.setColor(Color.BLACK);
+        dimPaint.setAlpha(150); // Полупрозрачный черный цвет (0-255)
+
+        // Левые, верхние, правые и нижние затемненные области
+        canvas.drawRect(0, 0, canvas.getWidth(), cropRect.top, dimPaint); // Верхняя область
+        canvas.drawRect(0, cropRect.top, cropRect.left, cropRect.bottom, dimPaint); // Левая область
+        canvas.drawRect(cropRect.right, cropRect.top, canvas.getWidth(), cropRect.bottom, dimPaint); // Правая область
+        canvas.drawRect(0, cropRect.bottom, canvas.getWidth(), canvas.getHeight(), dimPaint); // Нижняя область
+
+        // Отрисовка прямоугольника обрезки
+        Paint borderPaint = new Paint();
+        borderPaint.setColor(Color.WHITE);
+        borderPaint.setStyle(Paint.Style.STROKE);
+        borderPaint.setStrokeWidth(15);
+        borderPaint.setPathEffect(new DashPathEffect(new float[]{20, 10}, 0));
+        canvas.drawRect(cropRect, borderPaint);
     }
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-
+        // если болле одного палььца то мы реализуем onTouch родителя
         if (event.getPointerCount() > 1) {
             startCropFlag = false;
-            return super.onTouchEvent(event); // Handle zoom and scroll in parent class
+            return super.onTouchEvent(event);
         }
 
+        // если один палец то мы меняем рамку
         switch (event.getActionMasked()) {
             case MotionEvent.ACTION_DOWN:
                 movingEdge = findNearbyEdge(event.getX(), event.getY());
@@ -76,10 +97,12 @@ public class CustomPhotoCrop extends CustomPhotoView {
 
     }
 
+
     private ChangeFrame findNearbyEdge(float x, float y) {
         // Радиус касания для выбора точки
         float touchRadius = 50;
 
+        // выбор действия с рамкой
         if (Math.hypot(cropRect.left - x, cropRect.top - y) <= touchRadius) {
             return ChangeFrame.TOP_LEFT;
         } else if (Math.hypot(cropRect.right - x, cropRect.top - y) <= touchRadius) {
@@ -124,6 +147,7 @@ public class CustomPhotoCrop extends CustomPhotoView {
         return null;
     }
 
+    // изменение рамки обрезания
     private void adjustRect(float x, float y) {
         if (movingEdge != null) {
             switch (movingEdge) {
@@ -167,6 +191,7 @@ public class CustomPhotoCrop extends CustomPhotoView {
         cropRect.sort();
     }
 
+    // реализация самого обрезания изображения
     public Bitmap cropImage() {
         Drawable drawable = getDrawable();
         if (!(drawable instanceof BitmapDrawable)) {
@@ -202,6 +227,7 @@ public class CustomPhotoCrop extends CustomPhotoView {
     }
 
     @Override
+    // установка изображения в основной лайаут
     public void setImageBitmap(Bitmap bitmap) {
         setLimit_xy(50, 50);
         Drawable drawable = new BitmapDrawable(getResources(), bitmap);
@@ -209,6 +235,7 @@ public class CustomPhotoCrop extends CustomPhotoView {
         cropRect = new RectF(getDx(), getDy(), getDx() + getDrawable().getIntrinsicWidth() * getCurrentScale(), getDy() + getDrawable().getIntrinsicHeight() * getCurrentScale()); // Инициализация прямоугольника
     }
 
+    // сбор всех изменений
     public void reset(){
         fitImageView();
         cropRect = new RectF(getDx(), getDy(), getDx() + getDrawable().getIntrinsicWidth() * getCurrentScale(), getDy() + getDrawable().getIntrinsicHeight() * getCurrentScale()); // Инициализация прямоугольника
