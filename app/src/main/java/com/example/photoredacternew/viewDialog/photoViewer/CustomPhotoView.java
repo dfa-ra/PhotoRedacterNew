@@ -1,12 +1,15 @@
-package com.example.photoredacternew.customView;
+package com.example.photoredacternew.viewDialog.photoViewer;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.BidirectionalTypeConverter;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.RectF;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -17,17 +20,21 @@ import android.view.animation.DecelerateInterpolator;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatImageView;
-
+/**
+ * Класс отвещающий за просмотр фото, его скролл, зум двумя пальцами, зум двойным нажатием
+ */
 public class CustomPhotoView extends AppCompatImageView {
 
-    private Matrix matrix;
+    protected Matrix matrix;
     private ScaleGestureDetector scaleGestureDetector;
     private GestureDetector gestureDetector;
-    private float minScale = 0f;
-    private float maxScale = 0f;
+    public float minScale = 0f;
+    public float maxScale = 0f;
     private float doubleTapZoomScale = 0f;
     private boolean isZoomed = false;
-    private float currentScale = 0f;
+    protected float currentScale = 0f;
+    private float dx, dy;
+    private float limit_x = 0, limit_y = 0;
 
     public CustomPhotoView(Context context, AttributeSet attr) {
         super(context, attr);
@@ -66,7 +73,10 @@ public class CustomPhotoView extends AppCompatImageView {
     @Override
     public void setImageDrawable(@Nullable Drawable drawable) {
         super.setImageDrawable(drawable);
+        Log.d("aa88", "Custom View setImageDrawable");
         if (drawable != null) {
+
+            Log.d("aa88", "drawable != null");
             fitImageView();
             minScale = currentScale;
             maxScale = currentScale * 4;
@@ -75,7 +85,7 @@ public class CustomPhotoView extends AppCompatImageView {
     }
 
     // метод выравнивания фото по высоте или ширине
-    private void fitImageView() {
+    protected void fitImageView() {
         Drawable drawable = getDrawable();
         if (drawable == null) return;
 
@@ -84,15 +94,15 @@ public class CustomPhotoView extends AppCompatImageView {
         float drawableWidth = drawable.getIntrinsicWidth();
         float drawableHeight = drawable.getIntrinsicHeight();
 
-        float scale, dx, dy;
+        float scale;
         if (viewWidth / drawableWidth < viewHeight / drawableHeight) {
-            scale = viewWidth / drawableWidth;
-            dx = 0;
+            scale = (viewWidth - 2 * limit_x) / drawableWidth;
+            dx = limit_x;
             dy = (viewHeight - drawableHeight * scale) / 2;
         } else {
-            scale = viewHeight / drawableHeight;
+            scale = (viewHeight - 2 * limit_y) / drawableHeight;
             dx = (viewWidth - drawableWidth * scale) / 2;
-            dy = 0;
+            dy = limit_y;
         }
 
         currentScale = scale;  // Устанавливаем начальный масштаб
@@ -102,7 +112,7 @@ public class CustomPhotoView extends AppCompatImageView {
     }
 
     // проверка на всякие ограничения
-    private void checkBounds() {
+    public void checkBounds() {
         Drawable drawable = getDrawable();
         if (drawable == null) return;
 
@@ -162,7 +172,7 @@ public class CustomPhotoView extends AppCompatImageView {
     }
 
     // анимация зума
-    private void animateZoom(float focusX, float focusY) {
+    public void animateZoom(float focusX, float focusY) {
         float startScale = currentScale;
         float endScale = isZoomed ? minScale : currentScale + doubleTapZoomScale;
         isZoomed = !isZoomed;
@@ -201,4 +211,22 @@ public class CustomPhotoView extends AppCompatImageView {
 
         animator.start();
     }
+
+    public void setLimit_xy(float limit_x, float limit_y) {
+        this.limit_x = limit_x;
+        this.limit_y = limit_y;
+    }
+
+    public float getCurrentScale() {
+        return currentScale;
+    }
+
+    public float getDx() {
+        return dx;
+    }
+
+    public float getDy() {
+        return dy;
+    }
+
 }

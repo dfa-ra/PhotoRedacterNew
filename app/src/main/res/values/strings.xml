@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PhotoRedacterNew</string>
+    <string name="clear_all_crop">Сбросить всё</string>
+    <string name="clear_all_draw">Отчистить всё</string>
 </resources>

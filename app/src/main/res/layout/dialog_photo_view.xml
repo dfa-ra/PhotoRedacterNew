@@ -4,86 +4,93 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <LinearLayout
+    <RelativeLayout
+        android:id="@+id/full_image_view_relative_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="visible">
 
-        <com.example.photoredacternew.customView.CustomPhotoView
-            android:id="@+id/full_image_view"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:focusable="false"
+            android:layout_height="match_parent">
+
+            <com.example.photoredacternew.viewDialog.photoViewer.CustomPhotoView
+                android:id="@+id/full_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusable="false"
+                tools:ignore="MissingClass"/>
+
+        </LinearLayout>
+
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/load_animation"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
             tools:ignore="MissingClass" />
 
-    </LinearLayout>
+        <!-- кнопка закрыть -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"
+            android:alpha="0.8"
+            android:background="@drawable/map_fragment_buttons_background">
+            <Button
+                android:id="@+id/destroy"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
 
-    <com.github.ybq.android.spinkit.SpinKitView
-        android:id="@+id/load_animation"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_centerInParent="true"
-        android:visibility="gone"
-        tools:ignore="MissingClass" />
+                android:background="@drawable/cloase_icon"
+                />
+        </LinearLayout>
 
-    <!-- кнопка закрыть -->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentRight="true"
-        android:alpha="0.8"
-        android:background="@drawable/map_fragment_buttons_background">
-        <Button
-            android:id="@+id/destroy"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:alpha="0.8"
+            android:background="@drawable/map_fragment_buttons_background">
 
-            android:background="@drawable/cloase_icon"
-            />
-    </LinearLayout>
+            <Button
+                android:id="@+id/draw"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:visibility="visible"
+                android:background="@drawable/pencil" />
 
-    <!-- кнопка закрыть -->
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:alpha="0.8"
-        android:background="@drawable/map_fragment_buttons_background">
+            <Button
+                android:layout_marginStart="10dp"
+                android:id="@+id/crop"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:visibility="visible"
+                android:background="@drawable/crop" />
+        </LinearLayout>
 
-        <Button
-            android:id="@+id/colorPellete"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+    </RelativeLayout>
 
-            android:background="@android:drawable/ic_menu_edit" />
-    </LinearLayout>
-
-    <View
-        android:id="@+id/darken_layer"
+    <com.example.photoredacternew.viewDialog.photoDrawer.CustomDrawerRelativeLayout
+        android:id="@+id/full_image_draw_relative_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="invisible">
+    </com.example.photoredacternew.viewDialog.photoDrawer.CustomDrawerRelativeLayout>
 
-        android:background="#80000000"
-        android:visibility="gone" />
-
-    <LinearLayout
+    <com.example.photoredacternew.viewDialog.photoCropper.CustomCropperRelativeLayout
+        android:id="@+id/full_image_crop_relative_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center">
+        android:visibility="invisible">
 
-    <com.example.photoredacternew.customView.CustomPaletteView
-        android:id="@+id/customPaletteView"
-        android:layout_width="350dp"
-        android:layout_height="350dp"
-        app:colors="@array/colors"
-        app:positions="@array/positions"
-        android:visibility="gone" />
+    </com.example.photoredacternew.viewDialog.photoCropper.CustomCropperRelativeLayout>
 
-    </LinearLayout>
 
 </RelativeLayout>

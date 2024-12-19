@@ -1,0 +1,5 @@
+    <!-- custom_thumb.xml -->
+    <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+        <size android:width="35dp" android:height="35dp"/>
+        <stroke android:width="2dp" android:color="#CCCCCC"/> <!-- Цвет обводки -->
+    </shape>
