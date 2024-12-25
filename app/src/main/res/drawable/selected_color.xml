@@ -1,0 +1,9 @@
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Первый слой - фон (например, обводка) -->
+    <item
+        android:drawable="@drawable/custom_fill_thumb" />
+    <!-- Второй слой - заполнение -->
+    <item
+        android:drawable="@drawable/custom_border_thumb" />
+</layer-list>

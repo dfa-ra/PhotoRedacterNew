@@ -4,6 +4,16 @@
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
-
+    <style name="RoundedCorners">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">5dp</item>
+    </style>
     <style name="Theme.PhotoRedacterNew" parent="Base.Theme.PhotoRedacterNew" />
+
+    <style name="NoBottomSpaceBottomSheetDialog" parent="Theme.MaterialComponents.BottomSheetDialog">
+        <item name="behavior_peekHeight">0dp</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:layout_marginBottom">0dp</item>
+    </style>
+
 </resources>

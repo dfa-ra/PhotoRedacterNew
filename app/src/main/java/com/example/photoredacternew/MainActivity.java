@@ -10,7 +10,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.photoredacternew.databinding.ActivityMainBinding;
-import com.example.photoredacternew.dialogs.PhotoDialog;
+import com.example.photoredacternew.viewDialog.PhotoDialog;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         binding.button.setOnClickListener(view -> {
 
             PhotoDialog dialog = PhotoDialog.getInstance(MainActivity.this);
-            dialog.open();
+            DialogsManager.getInstance(this).showDialog(dialog);
 
             Picasso.get().load(url).into(new Target() {
                 @Override

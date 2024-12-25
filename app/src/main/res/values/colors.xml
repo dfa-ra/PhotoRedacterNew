@@ -16,7 +16,7 @@
     <color name="standart_light_color">#b8b8b8</color>
     <color name="standart_blue_color">#0000FE</color>
     <color name="select_color">#2e9cdb</color>
-    <color name="standart_background">#303030</color>
+    <color name="standart_background">#AA303030</color>
     <color name="background_common_edit_text">#424242</color>
     <color name="transperent">#00000000</color>
     <color name="background_outline"> #636262 </color>
